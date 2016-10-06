@@ -25,22 +25,17 @@ function Palette(_width, _height, colorData) {
 
 Palette.prototype.getColor = function(_x, _y) {
     push() // DONE FOR EVERY PIXEL - optimize
+    colorMode(HSL, 1)
     colorMode(RGB, 255)
     var hueVar, marble;
-    try {
-        var x = int(constrain(_x / paletteScaleFactor, 0, this.palWidth - 1))
-        var y = int(constrain(_y / paletteScaleFactor, 0, this.palHeight - 1))
-        hueVar = color(this.huesVbo.get(x, y))
-        // hueVar = hue(hcolor)
-        marble = color(this.marbleVbo.get(x, y))
-    } catch (err) {
-        console.log(err);
-        console.log("theo")
-    }
+    var x = int(constrain(_x / paletteScaleFactor, 0, this.palWidth - 1))
+    var y = int(constrain(_y / paletteScaleFactor, 0, this.palHeight - 1))
+    hueVar = color(this.huesVbo.get(x, y))
+    marble = color(this.marbleVbo.get(x, y))
+    colorMode(HSB, 1)
     var c = color(hue(hueVar), saturation(marble), brightness(marble))
     var h = hue(hueVar)
     pop()
-    // return color(0.2,1,1)
     return c
 }
 
