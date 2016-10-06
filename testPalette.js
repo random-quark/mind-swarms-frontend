@@ -6,10 +6,10 @@ function setup() {
 }
 
 function draw() {
-  background(255,0,0)
+  background(0,100,0)
   ellipse(50, 50, 80, 80)
-  image(pal.huesVbo,0,0)
-  // pal.huesVbo.loadPixels();
-  // console.log(pal.huesVbo.pixels[50,50])
+  image(pal.huesVbo,0, 0)
+  pal.huesVbo.loadPixels();
+  // console.log(pal.huesVbo.pixels[mouseX,mouseY])
   // console.log(pal.minMarbleBrightness)
 }
