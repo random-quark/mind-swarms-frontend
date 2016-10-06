@@ -25,7 +25,7 @@ function Palette(_width, _height, colorData) {
 
 Palette.prototype.getColor = function(_x, _y) {
     push() // DONE FOR EVERY PIXEL - optimize
-    colorMode(HSB, 1)
+    colorMode(RGB, 255)
     var hueVar, marble;
     try {
         var x = int(constrain(_x / paletteScaleFactor, 0, this.palWidth - 1))
