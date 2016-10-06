@@ -1,5 +1,3 @@
-var paletteScaleFactor = 2
-
 function Palette(_width, _height, colorData) {
     push()
     this.palWidth = _width / paletteScaleFactor
@@ -28,12 +26,22 @@ function Palette(_width, _height, colorData) {
 Palette.prototype.getColor = function(_x, _y) {
     push() // DONE FOR EVERY PIXEL - optimize
     colorMode(HSB, 1)
-    var x = _x / paletteScaleFactor
-    var y = _y / paletteScaleFactor
-    var hueVar = this.huesVbo.pixels[y * this.huesVbo.width + x]
-    var marble = this.marbleVbo.pixels[y * this.huesVbo.width + x]
+    var hueVar, marble;
+    try {
+        var x = int(constrain(_x / paletteScaleFactor, 0, this.palWidth - 1))
+        var y = int(constrain(_y / paletteScaleFactor, 0, this.palHeight - 1))
+        hueVar = color(this.huesVbo.get(x, y))
+        // hueVar = hue(hcolor)
+        marble = color(this.marbleVbo.get(x, y))
+    } catch (err) {
+        console.log(err);
+        console.log("theo")
+    }
+    var c = color(hue(hueVar), saturation(marble), brightness(marble))
+    var h = hue(hueVar)
     pop()
-    return color(hue(hueVar), saturation(marble), brightness(marble))
+    // return color(0.2,1,1)
+    return c
 }
 
 Palette.prototype.createMarble = function() {
