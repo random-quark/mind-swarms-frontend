@@ -1,9 +1,6 @@
 function Agent(canvasSize) {
-    this.settings = {
-        noiseZ: random(agentDefaults.interAgentNoiseZRange)
-    }
-    this.noiseZ = random(agentDefaults.interAgentNoiseZRange)
     this.settings = Object.assign(settings, agentDefaults)
+    this.noiseZ = random(this.settings.interAgentNoiseZRange)
     this.setLocation()
     this.setColor()
 }
@@ -35,7 +32,6 @@ Agent.prototype.update = function() {
 }
 
 Agent.prototype.draw = function() {
-    // TODO: set weight/width as well
     stroke(this.agentColor)
     line(this.location.previous.x, this.location.previous.y, this.location.current.x, this.location.current.y)
     this.location.previous.x = this.location.current.x
