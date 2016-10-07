@@ -34,7 +34,7 @@ Agent.prototype.update = function() {
     this.location.current.x += cos(angle) * this.settings.speed
     this.location.current.y += sin(angle) * this.settings.speed
     if (this.location.current.x<0 || this.location.current.x>width || this.location.current.y<0 || this.location.current.y>height) this.resetAgent()
-    this.noiseZ += this.settings.noiseStep
+    this.noiseZ += this.settings.noiseZStep
 }
 
 Agent.prototype.draw = function() {
@@ -54,8 +54,7 @@ Agent.prototype.draw = function() {
     // stroke(c)
 
     line(this.location.previous.x, this.location.previous.y, this.location.current.x, this.location.current.y)
-
-    this.location.previous = Object.assign({}, this.location.current)
-
+    this.location.previous.x = this.location.current.x
+    this.location.previous.y = this.location.current.y
     pop()
 }

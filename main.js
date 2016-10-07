@@ -1,12 +1,12 @@
 window.onload = main
 
 var canvasSize = {
-    width: 500,
+    width: 600,
     height: 400
 }
 
 var settings = {
-    agents: 1000,
+    agents: 5000,
     fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
