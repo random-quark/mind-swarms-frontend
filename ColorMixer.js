@@ -1,4 +1,4 @@
-function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList) {
+function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList, _blendFactor) {
     push()
     this.angerData = [19, 0.05, 0.9] // ORANGE
     this.joyData = [55, 0.02, 0.9] //YELLOW
@@ -19,6 +19,7 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList) {
         surprise: this.surpriseData,
         love: this.loveData
     }
+    this.blendFactor = _blendFactor
 
     this.mixedVbo = createImage(canvasSize.width, canvasSize.height)
 
@@ -43,18 +44,18 @@ ColorMixer.prototype.getColor = function(x, y) {
 
 ColorMixer.prototype.createMixedPalette = function() {
     push();
-    colorMode(HSB, 1)
+    colorMode(RGB, 255)
     var c1, c2, c
     this.mixedVbo.loadPixels()
     for (var x = 0; x < this.canvasSize.width; x++) {
         for (var y = 0; y < this.canvasSize.height; y++) {
-            c1 = this.palettes[0].getColor(x, y)
-            c2 = this.palettes[1].getColor(x, y)
+            c1 = color(this.palettes[0].getColor(x, y))
+            c2 = color(this.palettes[1].getColor(x, y))
             c = this.mixColors(c1, c2)
             this.mixedVbo.set(x, y, c)
         }
     }
-    var t =0
+    var t = 0
     this.mixedVbo.updatePixels()
     pop();
 }
@@ -63,5 +64,5 @@ ColorMixer.prototype.mixColors = function(c1, c2) {
     if (this.customBlend) {
         if (saturation(c1) < saturation(c2) * this.blendFactor) return c2
         else return c1
-    } else return blendColor(c1, c2, DARKEST)
+    } else return blendColor(c1, c2, DARKEST) // DOES NOT EXIST IN p5js
 }

@@ -1,6 +1,7 @@
 function Palette(_width, _height, paletteScaleFactor, colorData) {
     push()
     noiseDetail(10)
+    noiseSeed(random(10000)) // needed so that marbles are not the same (otherwise sometimes they are)
     this.paletteScaleFactor = paletteScaleFactor
     this.palWidth = _width / paletteScaleFactor
     this.palHeight = _height / paletteScaleFactor
@@ -18,7 +19,7 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
     this.minMarbleBrightness = colorData[2]
     this.noiseStep = 0.005
     this.randomXoffset = random(1000)
-    this.randomYoffset = random(1000)
+    this.randomYoffset = random(5000)
     this.createMarble()
     this.createHues()
     this.marbleVbo.loadPixels() // needed so that we can read values in getColor() function

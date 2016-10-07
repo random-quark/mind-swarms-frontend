@@ -27,12 +27,14 @@ Agent.prototype.resetAgent = function() {
 }
 
 Agent.prototype.update = function() {
-    var noiseVal = noise(this.location.current.x/this.settings.noiseScale + this.settings.randomSeed, this.location.current.y/this.settings.noiseScale + this.settings.randomSeed)
+    var noiseVal = noise(this.location.current.x/this.settings.noiseScale + this.settings.randomSeed,
+                                this.location.current.y/this.settings.noiseScale + this.settings.randomSeed, this.noiseZ)
     var angle = map(noiseVal, 0, 1, -1, 1)
     angle = (angle * radians(this.settings.maxAngleSpan)) + this.settings.randomInitialDirection
     this.location.current.x += cos(angle) * this.settings.speed
     this.location.current.y += sin(angle) * this.settings.speed
     if (this.location.current.x<0 || this.location.current.x>width || this.location.current.y<0 || this.location.current.y>height) this.resetAgent()
+    this.noiseZ += this.settings.noiseStep
 }
 
 Agent.prototype.draw = function() {
@@ -54,6 +56,6 @@ Agent.prototype.draw = function() {
     line(this.location.previous.x, this.location.previous.y, this.location.current.x, this.location.current.y)
 
     this.location.previous = Object.assign({}, this.location.current)
-    this.noiseZ += this.settings.noiseStep
+
     pop()
 }
