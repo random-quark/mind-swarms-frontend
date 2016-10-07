@@ -6,7 +6,7 @@ var canvasSize = {
 }
 
 var settings = {
-    agents: 5000,
+    agents: 4000,
     fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
@@ -18,16 +18,18 @@ var settings = {
 }
 
 var agentDefaults = {
-    agentsAlpha: 20 / 255,
+    agentsAlpha: 20,
     strokeWidth: 1,
     maxAngleSpan: 220,
     randomSeed: 0,
     speed: 3,
     noiseScale: 150,
     interAgentNoiseZRange: 0, // FIND CORRECT VALUE
-    noiseZStep: 0.001,
+    noiseZStep: 0.003,
     randomInitialDirection: 0 // TODO: should this randomized here?
 }
+
+var stats = new Stats();
 
 var agents = []
 
@@ -47,11 +49,16 @@ function setup() {
         agents.push(new Agent(canvasSize, agentDefaults))
     }
     // mydraw()
+    stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( stats.dom );
+    strokeWeight(agentDefaults.strokeWidth)
+    myDraw();
 }
 
-function draw() {
+function myDraw() {
+  stats.begin();
 
-    // fill(255, settings.fadeAlpha)
+    // fill(255)
     // noStroke()
     // rect(0, 0, canvasSize.width, canvasSize.height)
 
@@ -59,8 +66,11 @@ function draw() {
         agents[i].update()
         agents[i].draw()
     }
-    // requestAnimationFrame(mydraw) // only use if initiating draw ourselves
+
     if (settings.debug) showVbos()
+
+    stats.end();
+    requestAnimationFrame(myDraw) // only use if initiating draw ourselves
 }
 
 function main() {
