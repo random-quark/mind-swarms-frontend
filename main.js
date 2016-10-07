@@ -1,8 +1,8 @@
-window.onload = main
+  window.onload = main
 
 var canvasSize = {
-    width: 600 / 2,
-    height: 400 / 2
+    width: 600,
+    height: 400
 }
 
 var settings = {
@@ -21,11 +21,11 @@ var agentDefaults = {
     noiseScale: 150,
     randomSeed: 0,
     agentsAlpha: 20,
-    strokeWidth: 1,
+    strokeWidth: 2,
     maxAngleSpan: 220,
     speed: 3,
     interAgentNoiseZRange: 0, // FIND CORRECT VALUE
-    noiseZStep: 0.003,
+    noiseZStep: 0.001,
     randomInitialDirection: 0 // TODO: should this randomized here?
 }
 
@@ -42,14 +42,14 @@ var colorMixer
 
 function setup() {
     // TODO: make ajax call to backend to get emotions and amounts
+    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 
-    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, ["fear", "anger"], settings.blendFactor)
+    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, ["surprise", "anger"], settings.blendFactor)
     createCanvas(canvasSize.width, canvasSize.height)
     for (var i = 0; i < settings.agents; i++) {
         agents.push(new Agent(canvasSize, agentDefaults))
     }
-    // mydraw()
-    stats.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+
     document.body.appendChild(stats.dom);
     strokeWeight(agentDefaults.strokeWidth)
     myDraw();

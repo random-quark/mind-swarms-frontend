@@ -29,19 +29,6 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
 
 Palette.prototype.getColor = function(_x, _y) {
     return this.marbleVbo.get(_x,_y)
-    // push() // DONE FOR EVERY PIXEL - optimize
-    // colorMode(HSL, 1)
-    // colorMode(RGB, 255)
-    // var hueVar, marble;
-    // var x = int(constrain(_x / this.paletteScaleFactor, 0, this.palWidth - 1))
-    // var y = int(constrain(_y / this.paletteScaleFactor, 0, this.palHeight - 1))
-    // hueVar = color(this.huesVbo.get(x, y))
-    // marble = color(this.marbleVbo.get(x, y))
-    // colorMode(HSB, 1)
-    // var c = color(hue(hueVar), saturation(marble), brightness(marble))
-    // var h = hue(hueVar)
-    // pop()
-    // return c
 }
 
 Palette.prototype.createMarble = function() {
