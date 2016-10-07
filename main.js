@@ -1,18 +1,19 @@
 window.onload = main
 
-var canvasSize = { width: 500, height: 500 }
+var canvasSize = { width: 100, height: 100 }
 
 var settings = {
-    agents: 5000,
-    fadeAlpha: 5,
+    agents: 10,
+    fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
     blendFactor: 0.5,
-    paletteScaleFactor: 2
+    paletteScaleFactor: 2,
+    customBlend: true
 }
 
 var agentDefaults = {
-    agentsAlpha: 20,
+    agentsAlpha: 20 / 255,
     strokeWidth: 1,
     maxAngleSpan: 220,
     randomSeed: 0,
@@ -30,24 +31,30 @@ var data = {
     emotion1: null
 }
 
+var colorMixer
+
 function setup() {
-    console.log('setting up')
-    createCanvas(canvasSize.width, canvasSize.height)
+    // TODO: make ajax call to backend to get emotions and amounts
+
+    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, ["fear", "anger"])
+    createCanvas(canvasSize.width, canvasSize.height, WEBGL)
     for (var i=0; i<settings.agents; i++) {
         agents.push(new Agent(canvasSize, agentDefaults))
     }
-    draw()
+    // mydraw()
 }
 
 function draw() {
-    fill(255, settings.fadeAlpha)
-    noStroke()
-    rect(0, 0, canvasSize.width, canvasSize.height)
+    // fill(255, settings.fadeAlpha)
+    // noStroke()
+    // rect(0, 0, canvasSize.width, canvasSize.height)
     for (var i=0; i<agents.length; i++) {
         agents[i].update()
         agents[i].draw()
     }
-    // requestAnimationFrame(draw) // only use if initiating draw ourselves
+    // requestAnimationFrame(mydraw) // only use if initiating draw ourselves
+
+    line(10, 10, 0, 100, 150, 0)
 }
 
 function main() {

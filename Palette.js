@@ -1,5 +1,6 @@
-function Palette(_width, _height, colorData) {
+function Palette(_width, _height, paletteScaleFactor, colorData) {
     push()
+    this.paletteScaleFactor = paletteScaleFactor
     this.palWidth = _width / paletteScaleFactor
     this.palHeight = _height / paletteScaleFactor
     this.xPeriod = 1; // how many lines on the X axis
@@ -28,8 +29,8 @@ Palette.prototype.getColor = function(_x, _y) {
     colorMode(HSL, 1)
     colorMode(RGB, 255)
     var hueVar, marble;
-    var x = int(constrain(_x / paletteScaleFactor, 0, this.palWidth - 1))
-    var y = int(constrain(_y / paletteScaleFactor, 0, this.palHeight - 1))
+    var x = int(constrain(_x / this.paletteScaleFactor, 0, this.palWidth - 1))
+    var y = int(constrain(_y / this.paletteScaleFactor, 0, this.palHeight - 1))
     hueVar = color(this.huesVbo.get(x, y))
     marble = color(this.marbleVbo.get(x, y))
     colorMode(HSB, 1)

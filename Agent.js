@@ -3,7 +3,7 @@ function Agent(canvasSize, agentDefaults) {
         noiseZ: Math.random() * agentDefaults.interAgentNoiseZRange
     }
     this.noiseZ = 0
-    this.settings = Object.assign({}, agentDefaults)
+    this.settings = Object.assign(settings, agentDefaults)
     this.setLocation()
     this.setColor()
 }
@@ -18,13 +18,12 @@ Agent.prototype.setLocation = function() {
 }
 
 Agent.prototype.setColor = function() {
-    // this.agentColor = palette.getColor(this.location.current)
-    this.agentColor = 'black'
+    this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
 }
 
 Agent.prototype.resetAgent = function() {
-    this.setColor()
     this.setLocation()
+    this.setColor()
 }
 
 Agent.prototype.update = function() {
@@ -37,10 +36,24 @@ Agent.prototype.update = function() {
 }
 
 Agent.prototype.draw = function() {
-    // make sure alpha, stroke, strokeweight and strokewidth are set correctly
-    stroke(0, this.settings.agentsAlpha)
-    line(this.location.previous.x, this.location.previous.y, this.location.current.x, this.location.current.y)
+    push() // FIXME: inefficient?
+
+    // TODO: set weight/width as well
+
+    colorMode(HSL, 1)
+    colorMode(RGB, 255)
+    var c = color(this.agentColor)
+    colorMode(HSB, 1)
+    strokeWeight(this.settings.strokeWidth)
+    stroke(hue(c), saturation(c), brightness(c), this.settings.agentsAlpha)
+
+    // colorMode(RGB, 255)
+    // var c = color(this.agentColor)
+    // stroke(c)
+
+    // line(this.location.previous.x, this.location.previous.y, 0, this.location.current.x, this.location.current.y, 0)
 
     this.location.previous = Object.assign({}, this.location.current)
     this.noiseZ += this.settings.noiseStep
+    pop()
 }
