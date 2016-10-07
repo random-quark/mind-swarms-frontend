@@ -51,7 +51,7 @@ Agent.prototype.draw = function() {
     // var c = color(this.agentColor)
     // stroke(c)
 
-    // line(this.location.previous.x, this.location.previous.y, 0, this.location.current.x, this.location.current.y, 0)
+    line(this.location.previous.x, this.location.previous.y, this.location.current.x, this.location.current.y)
 
     this.location.previous = Object.assign({}, this.location.current)
     this.noiseZ += this.settings.noiseStep

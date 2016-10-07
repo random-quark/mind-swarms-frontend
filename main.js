@@ -1,6 +1,6 @@
 window.onload = main
 
-var canvasSize = { width: 100, height: 100 }
+var canvasSize = { width: 250, height: 250 }
 
 var settings = {
     agents: 10,
@@ -37,7 +37,7 @@ function setup() {
     // TODO: make ajax call to backend to get emotions and amounts
 
     colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, ["fear", "anger"])
-    createCanvas(canvasSize.width, canvasSize.height, WEBGL)
+    createCanvas(canvasSize.width, canvasSize.height)
     for (var i=0; i<settings.agents; i++) {
         agents.push(new Agent(canvasSize, agentDefaults))
     }
@@ -53,8 +53,6 @@ function draw() {
         agents[i].draw()
     }
     // requestAnimationFrame(mydraw) // only use if initiating draw ourselves
-
-    line(10, 10, 0, 100, 150, 0)
 }
 
 function main() {
