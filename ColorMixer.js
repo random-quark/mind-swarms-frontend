@@ -51,7 +51,7 @@ ColorMixer.prototype.createMixedPalette = function() {
             c1 = this.palettes[0].getColor(x, y)
             c2 = this.palettes[1].getColor(x, y)
             c = this.mixColors(c1, c2)
-            this.mixedVbo.set(x, y, c1)
+            this.mixedVbo.set(x, y, c)
         }
     }
     var t =0

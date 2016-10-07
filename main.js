@@ -1,6 +1,6 @@
 window.onload = main
 
-var canvasSize = { width: 250, height: 250 }
+var canvasSize = { width: 500, height: 400 }
 
 var settings = {
     agents: 10,
@@ -8,8 +8,9 @@ var settings = {
     noiseDet: 4,
     overlayAlpha: 0,
     blendFactor: 0.5,
-    paletteScaleFactor: 2,
-    customBlend: true
+    paletteScaleFactor: 1,
+    customBlend: true,
+    imageChoice: 0
 }
 
 var agentDefaults = {
@@ -45,13 +46,33 @@ function setup() {
 }
 
 function draw() {
+
     // fill(255, settings.fadeAlpha)
     // noStroke()
     // rect(0, 0, canvasSize.width, canvasSize.height)
-    for (var i=0; i<agents.length; i++) {
-        agents[i].update()
-        agents[i].draw()
+
+    switch (settings.imageChoice) {
+        case 0:
+            image(colorMixer.palettes[0].huesVbo, 0, 0)
+            break;
+        case 1:
+            image(colorMixer.palettes[0].marbleVbo, 0, 0)
+            break;
+        case 2:
+            image(colorMixer.palettes[1].huesVbo, 0, 0)
+            break;
+        case 3:
+            image(colorMixer.palettes[1].marbleVbo, 0, 0)
+            break;
+        case 4:
+            image(colorMixer.mixedVbo, 0, 0);
+            break;
     }
+
+    // for (var i=0; i<agents.length; i++) {
+    //     agents[i].update()
+    //     agents[i].draw()
+    // }
     // requestAnimationFrame(mydraw) // only use if initiating draw ourselves
 }
 
@@ -59,4 +80,11 @@ function main() {
     // var canvas = document.getElementById('swarm') // TODO: do we use our canvas or p5's?
     // var ctx = canvas.getContext('2d')
     // draw()
+}
+
+function mousePressed() {
+  if (mouseButton == LEFT) settings.imageChoice+=1
+  if (mouseButton == RIGHT) settings.imageChoice-=1
+  if (settings.imageChoice % 5 === 0) settings.imageChoice = 0
+  if (settings.imageChoice<0) settings.imageChoice = 0
 }
