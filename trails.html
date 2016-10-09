@@ -49,33 +49,33 @@
 
 			scene = new THREE.Scene();
 
-			// var colors = [ 0x000000, 0xff0080, 0x8000ff, 0xffffff ];
-			var colors = [0xffffff];
+			var colors = [0xff0080, 0x8000ff, 0xffffff];
 
-
-			for (var i = 0; i < 30000; i++) {
-				var vertex = new THREE.Vector3();
-				vertex.x = Math.random() * 400 - 200;
-				vertex.y = Math.random() * 3000 - 1500;
-				globalVertices.push(vertex)
-				geometry.vertices = globalVertices
-				geometry.colors.push(new THREE.Color(colors[Math.floor(Math.random() * colors.length)]));
-			}
-
-			var material = new THREE.PointsMaterial({
-				size: 1,
-				vertexColors: THREE.VertexColors,
-				depthTest: false,
+			var material = new THREE.LineBasicMaterial({
+				color: colors[Math.floor(Math.random() * colors.length)],
 				opacity: 0.5,
-				sizeAttenuation: false,
+					// linewidth: 5,
 				transparent: true
-			});
+			})
 
-			var mesh = new THREE.Points(geometry, material);
-			scene.add(mesh);
+			for (var i = 0; i < 200000; i++) {
+				var randLocX1 = Math.random() * 2000 - 1000;
+				var randLocY1 = Math.random() * 2000 - 1000;
+				var randLocX2 = randLocX1 - 25;
+				var randLocY2 = randLocY1 - 25;
+				geometry.vertices.push(
+					new THREE.Vector3(randLocX1, randLocY1, 0),
+					new THREE.Vector3(randLocX2, randLocY2, 0)
+				);
+
+			}
+			var line = new THREE.LineSegments(geometry, material);
+			scene.add(line);
+
 
 			renderer = new THREE.WebGLRenderer({
-				preserveDrawingBuffer: true
+				preserveDrawingBuffer: false,
+				antialias: true
 			});
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -86,88 +86,43 @@
 			stats = new Stats();
 			container.appendChild(stats.dom);
 
-			document.addEventListener('mousemove', onDocumentMouseMove, false);
+			camera.position.x = 0; //+= ( mouseX - camera.position.x ) * .05;
+			camera.position.y = 0; //+= ( - mouseY - camera.position.y ) * .05;
+			camera.lookAt(scene.position);
 
-			window.addEventListener('resize', onWindowResize, false);
-
+			// window.addEventListener('resize', onWindowResize, false);
+			// setInterval(animate, 1000 / 300)
 		}
 
-		function onWindowResize() {
-
-			windowHalfX = window.innerWidth / 2;
-			windowHalfY = window.innerHeight / 2;
-
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
-
-			renderer.setSize(window.innerWidth, window.innerHeight);
-
-		}
-
-		function onDocumentMouseMove(event) {
-			// mouseX = ( event.clientX - windowHalfX ) * 10;
-			// mouseY = ( event.clientY - windowHalfY ) * 10;
-		}
+		// function onWindowResize() {
+		//
+		// 	windowHalfX = window.innerWidth / 2;
+		// 	windowHalfY = window.innerHeight / 2;
+		//
+		// 	camera.aspect = window.innerWidth / window.innerHeight;
+		// 	camera.updateProjectionMatrix();
+		//
+		// 	renderer.setSize(window.innerWidth, window.innerHeight);
+		//
+		// }
 
 		function animate() {
-
 			requestAnimationFrame(animate);
-
-			// movePoints()
-			movePoints2()
-
+			movePoints()
 			render();
 			stats.update();
-
 		}
 
 		function render() {
-
-			camera.position.x = 0; //+= ( mouseX - camera.position.x ) * .05;
-			camera.position.y = 0; //+= ( - mouseY - camera.position.y ) * .05;
-
-			camera.lookAt(scene.position);
-
 			renderer.render(scene, camera);
-
-		}
-
-		function movePoints2() {
-			// console.log(geometry.vertices.length)
-			for (var i = 0; i < geometry.vertices.length; i++) {
-				geometry.vertices[i].x++
-			}
-			geometry.verticesNeedUpdate = true;
 		}
 
 		function movePoints() {
-			scene.remove(meshCopy)
-
-			var colors = [0x000000, 0xff0080, 0x8000ff, 0xffffff];
-			var geometry = new THREE.Geometry();
-
-			for (var i = 0; i < 30000; i++) {
-				var vertex = new THREE.Vector3();
-				vertex.x = Math.random() * 4000 - 2000;
-				vertex.y = Math.random() * 4000 - 2000;
-				// vertex.z = Math.random() * 4000 - 2000;
-				geometry.vertices.push(vertex);
-				geometry.colors.push(new THREE.Color(colors[Math.floor(Math.random() * colors.length)]));
+			for (var i = 0; i < geometry.vertices.length-1; i++) {
+				geometry.vertices[i].x+=Math.random() * 10 - 5
+				geometry.vertices[i].y+=Math.random() * 10 - 5
 			}
-
-			var material = new THREE.PointsMaterial({
-				size: 1,
-				vertexColors: THREE.VertexColors,
-				depthTest: false,
-				opacity: 0.5,
-				sizeAttenuation: false,
-				transparent: true
-			});
-			var mesh = new THREE.Points(geometry, material);
-
-			scene.add(mesh);
-			meshCopy = mesh
-
+			geometry.verticesNeedUpdate = true;
 		}
 	</script>
 
