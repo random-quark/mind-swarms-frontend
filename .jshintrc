@@ -1,3 +1,5 @@
 {
-  "asi": true
+  "asi": true,
+  "strict": "implied",
+  "browser": true
 }
