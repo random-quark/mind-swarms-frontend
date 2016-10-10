@@ -3,22 +3,22 @@ function Agent(i, canvasSize) {
     this.settings = Object.assign({}, agentDefaults)
     this.noiseZ = Math.random() * this.settings.interAgentNoiseZRange
 
+    this.setLocation()
+    // this.setColor()
+
     var randLocX1 = Math.random() * 2000 - 1000;
     var randLocY1 = Math.random() * 2000 - 1000;
     var randLocX2 = randLocX1 - 5;
     var randLocY2 = randLocY1 - 5;
     geometry.vertices.push(
-        new THREE.Vector3(randLocX1, randLocY1, 0),
-        new THREE.Vector3(randLocX2, randLocY2, 0)
+        new THREE.Vector3(this.location.previous.x, this.location.previous.y, 0),
+        new THREE.Vector3(this.location.current.x, this.location.current.y, 0)
     );
     this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
-    this.agentColor[3] = agentDefaults.agentsAlpha    
-    var c = Math.random() * 0xffffff
-    geometry.colors.push(new THREE.Color(c))
-    geometry.colors.push(new THREE.Color(c))
-
-    this.setLocation()
-    this.setColor()
+    this.agentColor[3] = agentDefaults.agentsAlpha
+    c = new THREE.Color("rgb(" + this.agentColor[0] + "," + this.agentColor[1] + "," + this.agentColor[2] + ")")
+    // c = new THREE.Color(0xffffff)
+    geometry.colors.push(c,c)
 }
 
 Agent.prototype.setLocation = function() {
@@ -35,7 +35,12 @@ Agent.prototype.setLocation = function() {
 }
 
 Agent.prototype.setColor = function() {
+    this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
+    this.agentColor[3] = agentDefaults.agentsAlpha
+    c = new THREE.Color("rgb(" + this.agentColor[0] + "," + this.agentColor[1] + "," + this.agentColor[2] + ")")
 
+    geometry.colors[this.i*2].set(c)
+    geometry.colors[this.i*2+1].set(c)
 }
 
 Agent.prototype.resetAgent = function() {
@@ -58,13 +63,6 @@ Agent.prototype.update = function() {
 
     geometry.vertices[this.i*2+1].x = this.location.current.x  - (canvasSize.width/2)
     geometry.vertices[this.i*2+1].y = this.location.current.y - (canvasSize.height/2)
-
-    // geometry.vertices[this.i*2].x = -1
-    // geometry.vertices[this.i*2].y = -1
-    //
-    // geometry.vertices[this.i*2+1].x = 1
-    // geometry.vertices[this.i*2+1].y = 1
-
 
     this.location.previous.x = this.location.current.x
     this.location.previous.y = this.location.current.y
