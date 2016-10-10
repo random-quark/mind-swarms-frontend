@@ -26,12 +26,9 @@
 		var container, stats;
 		var globalVertices = []
 		var geometry = new THREE.Geometry();
-
 		var camera, scene, renderer;
-
 		var mouseX = 0,
 			mouseY = 0;
-
 		var windowHalfX = window.innerWidth / 2;
 		var windowHalfY = window.innerHeight / 2;
 		var meshCopy;
@@ -46,11 +43,8 @@
 
 			camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
 			camera.position.set(100000, 0, 3200);
-
 			scene = new THREE.Scene();
-
 			var colors = [0xff0080, 0x8000ff, 0xffffff];
-
 			var material = new THREE.LineBasicMaterial({
 				color: colors[Math.floor(Math.random() * colors.length)],
 				opacity: 0.5,
@@ -58,11 +52,11 @@
 				transparent: true
 			})
 
-			for (var i = 0; i < 200000; i++) {
+			for (var i = 0; i < 60000; i++) {
 				var randLocX1 = Math.random() * 2000 - 1000;
 				var randLocY1 = Math.random() * 2000 - 1000;
-				var randLocX2 = randLocX1 - 25;
-				var randLocY2 = randLocY1 - 25;
+				var randLocX2 = randLocX1 - 5;
+				var randLocY2 = randLocY1 - 5;
 				geometry.vertices.push(
 					new THREE.Vector3(randLocX1, randLocY1, 0),
 					new THREE.Vector3(randLocX2, randLocY2, 0)
@@ -74,7 +68,7 @@
 
 
 			renderer = new THREE.WebGLRenderer({
-				preserveDrawingBuffer: false,
+				preserveDrawingBuffer: true,
 				antialias: true
 			});
 			renderer.setPixelRatio(window.devicePixelRatio);
