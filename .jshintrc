@@ -1,5 +1,11 @@
 {
   "asi": true,
   "strict": "implied",
-  "browser": true
+  "browser": true,
+  "globals": {
+    "THREE": false,
+    "ColorMixer": false,
+    "Agent": false,
+    "Stats": false
+  }
 }
