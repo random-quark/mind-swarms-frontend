@@ -1,10 +1,11 @@
 var canvasSize = {
-    width: 100,
-    height: 100
+    width: 500,
+    height: 600
 }
 
 var settings = {
-    agents: 15000,
+    agents: 30000,
+    sizeAgentRatio: 0.033,
     fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
@@ -22,7 +23,7 @@ var agentDefaults = {
     strokeWidth: 2,
     maxAngleSpan: 220,
     speed: 3,
-    interAgentNoiseZRange: 0, // FIND CORRECT VALUE
+    interAgentNoiseZRange: 0, // TODO: FIND CORRECT VALUE
     noiseZStep: 0.001,
     randomInitialDirection: 0 // TODO: should this randomized here?
 }
@@ -36,6 +37,8 @@ geometry = new THREE.Geometry();
 perlin = noise
 
 function setup() {
+    settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+
     camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
     camera.position.set(0, 0, -10);
     scene = new THREE.Scene();
