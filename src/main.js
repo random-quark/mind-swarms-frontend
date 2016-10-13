@@ -16,7 +16,8 @@ var settings = {
     customBlend: true,
     imageChoice: 0,
     debug: false,
-    emotions: []
+    emotions: [],
+    fetchPeriod: 60
 }
 
 var agentDefaults = {
@@ -37,6 +38,8 @@ var colorMixer
 var camera, scene, renderer, geometry
 geometry = new THREE.Geometry();
 
+var started = false
+
 perlin = noise
 
 function getData() {
@@ -44,16 +47,25 @@ function getData() {
         var data = JSON.parse(req.responseText)
         settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
         settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
-        init()
+        var action = started ? resetColorMixer : init
+        action()
     }
 
     var req = new XMLHttpRequest()
     req.addEventListener('load', reqListener)
     req.open('GET', basePath + '/sentiment/')
     req.send()
+
+    setTimeout(getData, settings.fetchPeriod * 1000)
+}
+
+function resetColorMixer() {
+    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
 }
 
 function init() {
+    started = true
+
     settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
     camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
