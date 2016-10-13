@@ -30,8 +30,8 @@ Agent.prototype.setLocation = function() {
 
 Agent.prototype.initColor = function() {
     this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
-    c = new THREE.Color("rgb(" + this.agentColor[0] + "," + this.agentColor[1] + "," + this.agentColor[2] + ")")
-    geometry.colors.push(c,c)
+    var color = new THREE.Color("rgb(" + this.agentColor[0] + "," + this.agentColor[1] + "," + this.agentColor[2] + ")")
+    geometry.colors.push(color, color)
 }
 
 Agent.prototype.setColor = function() {

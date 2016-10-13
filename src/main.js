@@ -1,6 +1,8 @@
+var basePath = 'https://vast-hamlet-96778.herokuapp.com'
+
 var canvasSize = {
-    width: 500,
-    height: 600
+    width: 100,
+    height: 100
 }
 
 var settings = {
@@ -13,7 +15,8 @@ var settings = {
     paletteScaleFactor: 1,
     customBlend: true,
     imageChoice: 0,
-    debug: false
+    debug: false,
+    emotions: []
 }
 
 var agentDefaults = {
@@ -36,7 +39,21 @@ geometry = new THREE.Geometry();
 
 perlin = noise
 
-function setup() {
+function getData() {
+    function reqListener() {
+        var data = JSON.parse(req.responseText)
+        settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
+        settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
+        init()
+    }
+
+    var req = new XMLHttpRequest()
+    req.addEventListener('load', reqListener)
+    req.open('GET', basePath + '/sentiment/')
+    req.send()
+}
+
+function init() {
     settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
     camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
@@ -47,7 +64,7 @@ function setup() {
         opacity: 0.1,
         transparent: true
     })
-    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, ["surprise", "anger"], settings.blendFactor)
+    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
     for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i))
     var line = new THREE.LineSegments(geometry, material);
     scene.add(line);
@@ -69,6 +86,10 @@ function setup() {
     document.body.appendChild(stats.dom)
 
     myDraw()
+}
+
+function setup() {
+    getData()
 }
 
 function myDraw() {
