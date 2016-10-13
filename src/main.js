@@ -1,10 +1,10 @@
 var canvasSize = {
-    width: 800,
-    height: 800
+    width: 100,
+    height: 100
 }
 
 var settings = {
-    agents: 30000,
+    agents: 15000,
     fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
@@ -36,7 +36,7 @@ geometry = new THREE.Geometry();
 perlin = noise
 
 function setup() {
-    camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 1500);
+    camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
     camera.position.set(0, 0, -10);
     scene = new THREE.Scene();
     var material = new THREE.MeshBasicMaterial({
@@ -53,9 +53,9 @@ function setup() {
         antialias: true,
         alpha: true
     });
-    renderer.setClearColor( 0xffffff, 0)
+    // renderer.setClearColor( 0xffffff, 0)
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(canvasSize.width, canvasSize.height)
     renderer.sortObjects = false
     renderer.autoClearColor = false
     camera.lookAt(scene.position)
