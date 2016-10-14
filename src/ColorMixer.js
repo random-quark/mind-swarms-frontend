@@ -1,5 +1,5 @@
 function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList, _blendFactor) {
-    push()
+    // push()
     this.angerData = [19, 0.05, 0.9] // ORANGE
     this.joyData = [55, 0.02, 0.9] //YELLOW
     this.calmData = [0, 0.1, 0.8] // WHITE
@@ -35,7 +35,7 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList, _
 
     this.mixedVbo.loadPixels();
 
-    pop()
+    // pop()
 }
 
 ColorMixer.prototype.getColor = function(x, y) {
@@ -43,7 +43,7 @@ ColorMixer.prototype.getColor = function(x, y) {
 }
 
 ColorMixer.prototype.createMixedPalette = function() {
-    push();
+    // push();
     colorMode(RGB, 255)
     var c1, c2, c
     this.mixedVbo.loadPixels()
@@ -57,7 +57,7 @@ ColorMixer.prototype.createMixedPalette = function() {
     }
     var t = 0
     this.mixedVbo.updatePixels()
-    pop();
+    // pop();
 }
 
 ColorMixer.prototype.mixColors = function(c1, c2) {
