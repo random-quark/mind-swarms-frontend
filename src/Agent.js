@@ -1,4 +1,4 @@
-/*globals geometry:false, agentDefaults:false, canvasSize: false, colorMixer: false */
+/*globals geometry:false, agentDefaults:false, canvasSize: false, colorMixer: false, customNoise: false */
 
 function Agent(i) {
     this.i = i
@@ -51,7 +51,7 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 }
 
 Agent.prototype.update = function() {
-    var noiseVal = noise(this.location.current.x / this.settings.noiseScale + this.settings.randomSeed,
+    var noiseVal = customNoise.noise(this.location.current.x / this.settings.noiseScale + this.settings.randomSeed,
         this.location.current.y / this.settings.noiseScale + this.settings.randomSeed, this.noiseZ + this.settings.randomSeed)
     var angle = noiseVal.map(0, 1, -1, 1)
     angle = angle * (this.settings.maxAngleSpan * Math.PI / 180) + this.settings.randomInitialDirection

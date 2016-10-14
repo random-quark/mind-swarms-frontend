@@ -41,7 +41,7 @@ geometry = new THREE.Geometry();
 var started = false
 var worker
 
-perlin = noise
+// perlin = noise
 
 function getData() {
     function reqListener() {
@@ -108,7 +108,7 @@ function init() {
         antialias: true,
         alpha: true
     });
-    // renderer.setClearColor( 0xffffff, 0)
+    renderer.setClearColor(0xffffff, 0)
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(canvasSize.width, canvasSize.height)
     renderer.sortObjects = false
@@ -125,7 +125,7 @@ function init() {
 
 getData()
 
-// function setup() {    
+// function setup() {
 // }
 
 function myDraw() {
