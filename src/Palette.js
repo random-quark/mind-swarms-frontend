@@ -1,7 +1,7 @@
 function Palette(_width, _height, paletteScaleFactor, colorData) {
     // push()
-    noiseDetail(10)
-    noiseSeed(random(10000)) // needed so that marbles are not the same (otherwise sometimes they are)
+    customNoise.noiseDetail(10)
+    customNoise.noiseSeed(Math.random()*10000) // needed so that marbles are not the same (otherwise sometimes they are)
     this.paletteScaleFactor = paletteScaleFactor
     this.palWidth = _width / paletteScaleFactor
     this.palHeight = _height / paletteScaleFactor
@@ -9,63 +9,49 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
     this.yPeriod = 1; // how many lins on the Y axis
     this.turbPower = 2.0; // how much turbulence
     this.turbSize = 170; // noise zoom in factor
-    this.marbleVbo = createImage(this.palWidth, this.palHeight)
-    this.marbleArray = [[]]
-    this.huesVbo = createImage(this.palWidth, 100)
-    this.hueOffset = random(10000)
+    // this.marbleVbo = createImage(this.palWidth, this.palHeight)
+    this.marbleVbo = [[]]
+    // this.huesVbo = createImage(this.palWidth, 100)
+    this.hueOffset = Math.random()*10000
     this.hueOffsetDebug = this.hueOffset
-    colorMode(HSB, 360)
-    this.c = color(colorData[0], 100, 100)
+    // newP5.colorMode('hsb', 360)
+    // this.c = color(colorData[0], 100, 100)
+    this.c = colorData[0] / 360
     this.hueRange = colorData[1]
     this.minMarbleBrightness = colorData[2]
     this.noiseStep = 0.005
-    this.randomXoffset = random(1000)
-    this.randomYoffset = random(5000)
+    this.randomXoffset = Math.random()*1000
+    this.randomYoffset = Math.random()*5000
     this.createMarble()
     // this.createHues()
-    this.marbleVbo.loadPixels() // needed so that we can read values in getColor() function
-    this.huesVbo.loadPixels() // needed so that we can read values in getColor() function
+    // this.marbleVbo.loadPixels() // needed so that we can read values in getColor() function
+    // this.huesVbo.loadPixels() // needed so that we can read values in getColor() function
     // pop()
 }
 
 Palette.prototype.getColor = function(_x, _y) {
-    return this.marbleVbo.get(_x/this.paletteScaleFactor,_y/this.paletteScaleFactor)
+    return this.marbleVbo[Math.floor(_x/this.paletteScaleFactor)][Math.floor(_y/this.paletteScaleFactor)]
+}
+
+Palette.prototype.map = function(n, start1, stop1, start2, stop2) {
+  return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
 }
 
 Palette.prototype.createMarble = function() {
-    // push()
-    this.marbleVbo.loadPixels()
-    colorMode(HSB, 1) // FIX ME!!! THIS SHOULD NOT BE HERE!!!! MAYBE A PUSHSTYLE INTHIS FUNCTION?????
+    // this.marbleVbo.loadPixels()
+    // colorMode(HSB, 1) // FIX ME!!! THIS SHOULD NOT BE HERE!!!! MAYBE A PUSHSTYLE INTHIS FUNCTION?????
     for (var x = 0; x < this.palWidth; x++) {
-      var hueVar = hue(this.c) + map(noise(this.hueOffset), 0, 1, -this.hueRange, this.hueRange)
+      var hueVar = this.c + this.map(customNoise.noise(this.hueOffset), 0, 1, -this.hueRange, this.hueRange)
       if (hueVar < 0) hueVar += 1
-      this.marbleArray[x] = []
+      this.marbleVbo[x] = []
         for (var y = 0; y < this.palHeight; y++) {
-            var xyValue = (x + this.randomXoffset) * this.xPeriod / this.palWidth + (y + this.randomYoffset) * this.yPeriod / this.palHeight + this.turbPower * noise(x / this.turbSize, y / this.turbSize)
-            var sineValue = abs(sin(xyValue * 3.14159))
-            var tempColor = color(hueVar, 1 - sineValue, map(sineValue, 0, 1, this.minMarbleBrightness, 1))
-            this.marbleVbo.set(x, y, tempColor)
-            this.marbleArray[x].push(tempColor._array)
+            var xyValue = (x + this.randomXoffset) * this.xPeriod / this.palWidth + (y + this.randomYoffset) * this.yPeriod / this.palHeight + this.turbPower * customNoise.noise(x / this.turbSize, y / this.turbSize)
+            var sineValue = Math.abs(Math.sin(xyValue * 3.14159))
+            var tempColor = [hueVar, 1 - sineValue, this.map(sineValue, 0, 1, this.minMarbleBrightness, 1)]
+            // this.marbleVbo.set(x, y, tempColor)
+            this.marbleVbo[x].push(tempColor)
         }
         this.hueOffset += this.noiseStep
     }
-    this.marbleVbo.updatePixels();
-    // pop();
+    // this.marbleVbo.updatePixels();
 }
-
-// Palette.prototype.createHues = function() {
-//     push()
-//     this.huesVbo.loadPixels()
-//     colorMode(HSB, 1)
-//     for (var x = 0; x < this.palWidth; x++) {
-//         var hueVar = hue(this.c) + map(noise(this.hueOffsetDebug), 0, 1, -this.hueRange, this.hueRange)
-//         if (hueVar < 0) hueVar += 1
-//         var tempColor = color(hueVar, 1, 1)
-//         for (var y = 0; y < this.palHeight; y++) {
-//             this.huesVbo.set(x, y, tempColor)
-//         }
-//         this.hueOffsetDebug += this.noiseStep
-//     }
-//     this.huesVbo.updatePixels()
-//     pop()
-// }

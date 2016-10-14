@@ -34,36 +34,38 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList, _
 
     this.createMixedPalette();
 
-    this.mixedVbo.loadPixels();
+    // this.mixedVbo.loadPixels();
 
     // pop()
 }
 
 ColorMixer.prototype.getColor = function(x, y) {
-    return this.mixedVbo.get(x, y)
+    return this.mixedVbo[x][y]
 }
 
 ColorMixer.prototype.createMixedPalette = function() {
     // push();
-    colorMode(RGB, 255)
+    // colorMode(RGB, 255)
     var c1, c2, c
-    this.mixedVbo.loadPixels()
+    // this.mixedVbo.loadPixels()
     for (var x = 0; x < this.canvasSize.width; x++) {
+        this.mixedVbo[x] = []
         for (var y = 0; y < this.canvasSize.height; y++) {
-            c1 = color(this.palettes[0].getColor(x, y))
-            c2 = color(this.palettes[1].getColor(x, y))
+            c1 = this.palettes[0].getColor(x,y)
+            c2 = this.palettes[1].getColor(x,y)
             c = this.mixColors(c1, c2)
-            this.mixedVbo.set(x, y, c)
+            this.mixedVbo[x].push(c)
         }
     }
     var t = 0
-    this.mixedVbo.updatePixels()
+    // this.mixedVbo.updatePixels()
     // pop();
 }
 
 ColorMixer.prototype.mixColors = function(c1, c2) {
     if (this.customBlend) {
-        if (saturation(c1) < saturation(c2) * this.blendFactor) return c2
+        if (c1[1] < c2[1] * this.blendFactor) return c2
         else return c1
-    } else return blendColor(c1, c2, DARKEST) // DOES NOT EXIST IN p5js
+    }
+    // else return blendColor(c1, c2, DARKEST) // MAKE IT YOURSELF BY COPYING PROCESSING CODE
 }
