@@ -1,8 +1,8 @@
 var basePath = 'https://vast-hamlet-96778.herokuapp.com'
 
 var canvasSize = {
-    width: 200,
-    height: 100
+    width: 300,
+    height: 300
 }
 
 var settings = {
