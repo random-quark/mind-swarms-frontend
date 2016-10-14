@@ -1,8 +1,10 @@
+window.onload = init
+
 var basePath = 'https://vast-hamlet-96778.herokuapp.com'
 
 var canvasSize = {
-    width: 300,
-    height: 300
+    width: window.innerWidth,
+    height: window.innerHeight
 }
 
 var settings = {
@@ -16,7 +18,7 @@ var settings = {
     customBlend: true,
     imageChoice: 0,
     debug: false,
-    emotions: [],
+    emotions: ['joy', 'anger'],
     fetchPeriod: 60
 }
 
@@ -68,7 +70,6 @@ function setColorLowResMixer() {
     // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
     colorMixer = new ColorMixer(canvasSize, 2, settings.customBlend, ["fear", "anger"], settings.blendFactor)
 }
-
 
 function startWorker() {
     if(typeof(Worker) !== "undefined") {
@@ -123,10 +124,7 @@ function init() {
     myDraw()
 }
 
-getData()
-
-// function setup() {
-// }
+// getData()
 
 function myDraw() {
     stats.begin()
