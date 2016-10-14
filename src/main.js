@@ -1,8 +1,8 @@
 var basePath = 'https://vast-hamlet-96778.herokuapp.com'
 
 var canvasSize = {
-    width: 100,
-    height: 100
+    width: 1200,
+    height: 800
 }
 
 var settings = {
@@ -40,7 +40,7 @@ geometry = new THREE.Geometry();
 
 var started = false
 
-perlin = noise
+// perlin = noise
 
 function getData() {
     function reqListener() {
@@ -85,7 +85,7 @@ function init() {
         antialias: true,
         alpha: true
     });
-    // renderer.setClearColor( 0xffffff, 0)
+    renderer.setClearColor(0xffffff, 0)
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(canvasSize.width, canvasSize.height)
     renderer.sortObjects = false
