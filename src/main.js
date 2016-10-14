@@ -8,13 +8,13 @@ var canvasSize = {
 }
 
 var settings = {
-    agents: 30000,
+    agents: 60000,
     sizeAgentRatio: 0.033,
     fadeAlpha: 0,
     noiseDet: 4,
     overlayAlpha: 0,
     blendFactor: 0.2,
-    paletteScaleFactor: 1,
+    paletteScaleFactor: 2,
     customBlend: true,
     imageChoice: 0,
     debug: false,
@@ -23,7 +23,7 @@ var settings = {
 }
 
 var agentDefaults = {
-    noiseScale: 150,
+    noiseScale: 200,
     randomSeed: 0,
     agentsAlpha: 20,
     strokeWidth: 2,
@@ -62,27 +62,27 @@ function getData() {
     setTimeout(getData, settings.fetchPeriod * 1000)
 }
 
-function setColorHiResMixer() {
-    // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
-    colorMixer = new ColorMixer(canvasSize, 1, settings.customBlend, ["fear", "anger"], settings.blendFactor)
-}
+// function setColorHiResMixer() {
+//     // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
+//     colorMixer = new ColorMixer(canvasSize, 1, settings.customBlend, ["fear", "anger"], settings.blendFactor)
+// }
 function setColorLowResMixer() {
     // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
     colorMixer = new ColorMixer(canvasSize, 2, settings.customBlend, ["fear", "anger"], settings.blendFactor)
 }
 
-function startWorker() {
-    if(typeof(Worker) !== "undefined") {
-        if(typeof(worker) == "undefined") {
-            worker = new Worker("src/webWorker.js");
-        }
-        worker.onmessage = function(event) {
-            console.log(event.data)
-        };
-    } else {
-        // document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
-    }
-}
+// function startWorker() {
+//     if(typeof(Worker) !== "undefined") {
+//         if(typeof(worker) == "undefined") {
+//             worker = new Worker("src/webWorker.js");
+//         }
+//         worker.onmessage = function(event) {
+//             console.log(event.data)
+//         };
+//     } else {
+//         // document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+//     }
+// }
 
 function init() {
 
@@ -90,7 +90,7 @@ function init() {
     setColorLowResMixer()
     // startWorker()
 
-    settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+    // settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
     camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
     camera.position.set(0, 0, -10);
@@ -107,7 +107,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({
         preserveDrawingBuffer: true,
         antialias: true,
-        alpha: true
+        alpha: true,
     });
     renderer.setClearColor(0xffffff, 0)
     renderer.setPixelRatio(window.devicePixelRatio)
@@ -132,8 +132,10 @@ function myDraw() {
         agents[i].update()
     }
     stats.end()
+
     geometry.verticesNeedUpdate = true;
     geometry.colorsNeedUpdate = true
     renderer.render(scene, camera)
+
     requestAnimationFrame(myDraw)
 }
