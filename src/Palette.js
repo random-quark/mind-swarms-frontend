@@ -1,5 +1,5 @@
 function Palette(_width, _height, paletteScaleFactor, colorData) {
-    push()
+    // push()
     noiseDetail(10)
     noiseSeed(random(10000)) // needed so that marbles are not the same (otherwise sometimes they are)
     this.paletteScaleFactor = paletteScaleFactor
@@ -24,7 +24,7 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
     this.createHues()
     this.marbleVbo.loadPixels() // needed so that we can read values in getColor() function
     this.huesVbo.loadPixels() // needed so that we can read values in getColor() function
-    pop()
+    // pop()
 }
 
 Palette.prototype.getColor = function(_x, _y) {
@@ -32,7 +32,7 @@ Palette.prototype.getColor = function(_x, _y) {
 }
 
 Palette.prototype.createMarble = function() {
-    push()
+    // push()
     this.marbleVbo.loadPixels()
     colorMode(HSB, 1) // FIX ME!!! THIS SHOULD NOT BE HERE!!!! MAYBE A PUSHSTYLE INTHIS FUNCTION?????
     for (var x = 0; x < this.palWidth; x++) {
@@ -47,7 +47,7 @@ Palette.prototype.createMarble = function() {
         this.hueOffset += this.noiseStep
     }
     this.marbleVbo.updatePixels();
-    pop();
+    // pop();
 }
 
 Palette.prototype.createHues = function() {
