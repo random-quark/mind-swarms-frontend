@@ -1,8 +1,8 @@
 var basePath = 'https://vast-hamlet-96778.herokuapp.com'
 
 var canvasSize = {
-    width: 100,
-    height: 100
+    width: 600,
+    height: 400
 }
 
 var settings = {
@@ -39,6 +39,7 @@ var camera, scene, renderer, geometry
 geometry = new THREE.Geometry();
 
 var started = false
+var worker
 
 perlin = noise
 
@@ -59,12 +60,34 @@ function getData() {
     setTimeout(getData, settings.fetchPeriod * 1000)
 }
 
-function resetColorMixer() {
-    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
+function setColorHiResMixer() {
+    // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
+    colorMixer = new ColorMixer(canvasSize, 1, settings.customBlend, ["fear", "anger"], settings.blendFactor)
+}
+function setColorLowResMixer() {
+    // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
+    colorMixer = new ColorMixer(canvasSize, 2, settings.customBlend, ["fear", "anger"], settings.blendFactor)
+}
+
+
+function startWorker() {
+    if(typeof(Worker) !== "undefined") {
+        if(typeof(worker) == "undefined") {
+            worker = new Worker("src/webWorker.js");
+        }
+        worker.onmessage = function(event) {
+            console.log(event.data)
+        };
+    } else {
+        // document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+    }
 }
 
 function init() {
+
     started = true
+    setColorLowResMixer()
+    startWorker()
 
     settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
@@ -76,7 +99,7 @@ function init() {
         opacity: 0.1,
         transparent: true
     })
-    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
+
     for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i))
     var line = new THREE.LineSegments(geometry, material);
     scene.add(line);
