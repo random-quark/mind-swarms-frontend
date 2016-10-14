@@ -26,7 +26,7 @@ window = self
 
 function timedCount() {
     self.importScripts('ColorMixer.js')
-    self.importScripts('../lib/p5.js')
+    self.importScripts('newP5.js')
     i = i + 1
     colorMixer = new ColorMixer(canvasSize, 1, settings.customBlend, ["fear", "anger"], settings.blendFactor)
         // setTimeout("timedCount()",500)
