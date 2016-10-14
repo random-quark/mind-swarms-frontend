@@ -3,8 +3,8 @@ window.onload = init
 var basePath = 'https://vast-hamlet-96778.herokuapp.com'
 
 var canvasSize = {
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: window.innerWidth*0.998,
+    height: window.innerHeight*0.99
 }
 
 var settings = {
@@ -23,7 +23,7 @@ var settings = {
 }
 
 var agentDefaults = {
-    noiseScale: 200,
+    noiseScale: 150,
     randomSeed: 0,
     agentsAlpha: 20,
     strokeWidth: 2,

@@ -4,7 +4,7 @@ function Agent(i) {
     this.i = i
     this.settings = Object.assign({}, agentDefaults)
     this.noiseZ = Math.random() * this.settings.interAgentNoiseZRange
-
+    this.widthHeighRatio = canvasSize.width/canvasSize.height
     this.setLocation()
 
     geometry.vertices.push(
@@ -59,7 +59,7 @@ Agent.prototype.map = function(n, start1, stop1, start2, stop2) {
 }
 
 Agent.prototype.update = function() {
-    var nx = this.location.current.x / this.settings.noiseScale + this.settings.randomSeed
+    var nx = this.location.current.x / (this.settings.noiseScale * this.widthHeighRatio) + this.settings.randomSeed
     var ny = this.location.current.y / this.settings.noiseScale + this.settings.randomSeed
     var nz = this.noiseZ + this.settings.randomSeed
     // var noiseVal = customNoise.noise(nx, ny, nz)
