@@ -21,7 +21,8 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsList, _
     }
     this.blendFactor = _blendFactor
 
-    this.mixedVbo = createImage(canvasSize.width, canvasSize.height)
+    // this.mixedVbo = createImage(canvasSize.width, canvasSize.height)
+    this.mixedVbo = [[]]
 
     var colorData1 = this.emotionsData[emotionsList[0]]
     var colorData2 = this.emotionsData[emotionsList[1]]
