@@ -62,11 +62,11 @@ Agent.prototype.update = function() {
     var nx = this.location.current.x / (this.settings.noiseScale * this.widthHeighRatio) + this.settings.randomSeed
     var ny = this.location.current.y / this.settings.noiseScale + this.settings.randomSeed
     var nz = this.noiseZ + this.settings.randomSeed
-    // var noiseVal = customNoise.noise(nx, ny, nz)
-    // var angle = this.map(noiseVal, -1, 1, -1, 1)
+    var noiseVal = customNoise.noise(nx, ny, nz)
+    var angle = this.map(noiseVal, 0, 1, -1, 1)
 
-    var noiseVal = noise.perlin3(nx, ny, nz)
-    var angle = this.map(noiseVal, -1, 1, -1, 1)
+    // var noiseVal = noise.perlin3(nx, ny, nz)
+    // var angle = this.map(noiseVal, -1, 1, -1, 1)
 
 
     angle = angle * (this.settings.maxAngleSpan * Math.PI / 180) + this.settings.randomInitialDirection

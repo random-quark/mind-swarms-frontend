@@ -8,7 +8,7 @@ var canvasSize = {
 }
 
 var settings = {
-    agents: 60000,
+    agents: 70000,
     sizeAgentRatio: 0.033,
     fadeAlpha: 0,
     noiseDet: 4,
@@ -23,7 +23,7 @@ var settings = {
 }
 
 var agentDefaults = {
-    noiseScale: 150,
+    noiseScale: 200,
     randomSeed: 0,
     agentsAlpha: 20,
     strokeWidth: 2,
@@ -98,7 +98,8 @@ function init() {
     var material = new THREE.MeshBasicMaterial({
         vertexColors: THREE.VertexColors,
         opacity: 0.1,
-        transparent: true
+        transparent: true,
+        linewidth: 1
     })
 
     for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i))
