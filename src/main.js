@@ -87,7 +87,7 @@ function init() {
 
     started = true
     setColorLowResMixer()
-    startWorker()
+    // startWorker()
 
     settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
@@ -123,9 +123,10 @@ function init() {
     myDraw()
 }
 
-function setup() {
-    getData()
-}
+getData()
+
+// function setup() {    
+// }
 
 function myDraw() {
     stats.begin()
