@@ -28,7 +28,7 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
 }
 
 Palette.prototype.getColor = function(_x, _y) {
-    return this.marbleVbo.get(_x,_y)
+    return this.marbleVbo.get(_x/this.paletteScaleFactor,_y/this.paletteScaleFactor)
 }
 
 Palette.prototype.createMarble = function() {
