@@ -28,22 +28,16 @@ Agent.prototype.setLocation = function() {
     }
 }
 
-Agent.prototype.HSB2HSL = function(h, s, b) {
-    var l = (2 - s) * b / 2;
-    s = l && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : s;
-    return [h, s, l]
-}
-
 Agent.prototype.initColor = function() {
     this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
-    var colorHSL = this.HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
+    var colorHSL = HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
     var color = new THREE.Color().setHSL(colorHSL[0], colorHSL[1], colorHSL[2])
     geometry.colors.push(color, color)
 }
 
 Agent.prototype.setColor = function() {
     this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
-    var colorHSL = this.HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
+    var colorHSL = HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
     var color = new THREE.Color().setHSL(colorHSL[0], colorHSL[1], colorHSL[2])
     geometry.colors[this.i * 2].set(color)
     geometry.colors[this.i * 2 + 1].set(color)

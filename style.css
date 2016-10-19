@@ -1,4 +1,31 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+.swarm-overlay {
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.swarm-overlay .logo {
+  margin-bottom: 100px;
+  padding: 30px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.swarm-overlay .text span {
+  text-transform: uppercase;
+  font-size: 20px;
+  padding: 6px;
+  margin-right: 10px;
 }
