@@ -67,7 +67,8 @@ function getData() {
         var data = JSON.parse(req.responseText)
         settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
         settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
-        var action = started ? setColorLowResMixer : init
+				settings.word = data.word
+        var action = started ? update : init
         action()
     }
 
@@ -88,9 +89,14 @@ function setColorLowResMixer() {
     colorMixer = new ColorMixer(canvasSize, 2, settings.customBlend, settings.emotions, settings.blendFactor)
 }
 
+function update() {
+	setColorLowResMixer()
+	document.getElementById('swarm-emotion-word').innerHTML = settings.word
+}
+
 function init() {
     started = true
-    addOverlay(settings.emotions[0], [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
+    addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
     setColorLowResMixer()
     // startWorker()
 
@@ -164,6 +170,8 @@ function addOverlay(emotion, colors) {
   logo.style.backgroundImage = gradient
   textA.style.backgroundImage = gradient
   textB.style.backgroundImage = gradient2
+
+	textB.id = "swarm-emotion-word"
 
   overlay.appendChild(logo)
   overlay.appendChild(text)
