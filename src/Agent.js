@@ -1,8 +1,12 @@
 /*globals geometry:false, agentDefaults:false, canvasSize: false, colorMixer: false, customNoise: false */
 
-function Agent(i) {
+function Agent(i, agentDefaults, canvasSize, limits, geometry, colorMixer) {
     this.i = i
     this.settings = Object.assign({}, agentDefaults)
+    this.canvasSize = canvasSize
+    this.limits = limits
+    this.colorMixer = colorMixer
+    this.geometry = geometry
     this.noiseZ = Math.random() * this.settings.interAgentNoiseZRange
     this.widthHeighRatio = canvasSize.width/canvasSize.height
     this.setLocation()
@@ -18,8 +22,8 @@ function Agent(i) {
 Agent.prototype.setLocation = function() {
     this.location = {
         current: {
-            x: Math.floor( (Math.random() * (canvasSize.width+limits.range*2) - limits.range) ),
-            y: Math.floor( (Math.random() * (canvasSize.height+limits.range*2) - limits.range) )
+            x: Math.floor( (Math.random() * (this.canvasSize.width+this.limits.range*2) - this.limits.range) ),
+            y: Math.floor( (Math.random() * (this.canvasSize.height+this.limits.range*2) - this.limits.range) )
         }
     }
     this.location.previous = {
@@ -33,17 +37,17 @@ Agent.prototype.constrain = function(value, min, max) {
 }
 
 Agent.prototype.setColor = function() {
-    var x = this.constrain(this.location.current.x, 0, canvasSize.width-1)
-    var y = this.constrain(this.location.current.y, 0, canvasSize.height-1)
+    var x = this.constrain(this.location.current.x, 0, this.canvasSize.width-1)
+    var y = this.constrain(this.location.current.y, 0, this.canvasSize.height-1)
 
-    this.agentColor = colorMixer.getColor(x, y)
+    this.agentColor = this.colorMixer.getColor(x, y)
     var colorHSL = HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
     var color = new THREE.Color().setHSL(colorHSL[0], colorHSL[1], colorHSL[2])
-    if (geometry.colors[this.i*2]) {
-      geometry.colors[this.i * 2].set(color)
-      geometry.colors[this.i * 2 + 1].set(color)
+    if (this.geometry.colors[this.i*2]) {
+      this.geometry.colors[this.i * 2].set(color)
+      this.geometry.colors[this.i * 2 + 1].set(color)
     } else {
-      geometry.colors.push(color, color)
+      this.geometry.colors.push(color, color)
     }
 }
 
@@ -72,14 +76,14 @@ Agent.prototype.update = function() {
     this.location.current.y += Math.sin(angle) * this.settings.speed // SLOW +30ms
 
     // INSIGNIFICANT TIME
-    if (this.location.current.x < 0-limits.range || this.location.current.x > canvasSize.width+limits.range || this.location.current.y < 0-limits.range || this.location.current.y > canvasSize.height+limits.range) this.resetAgent()
+    if (this.location.current.x < 0-this.limits.range || this.location.current.x > this.canvasSize.width+this.limits.range || this.location.current.y < 0-this.limits.range || this.location.current.y > this.canvasSize.height+this.limits.range) this.resetAgent()
     this.noiseZ += this.settings.noiseZStep
 
-    geometry.vertices[this.i * 2].x = this.location.previous.x - canvasSize.width / 2
-    geometry.vertices[this.i * 2].y = this.location.previous.y - canvasSize.height / 2
+    this.geometry.vertices[this.i * 2].x = this.location.previous.x - this.canvasSize.width / 2
+    this.geometry.vertices[this.i * 2].y = this.location.previous.y - this.canvasSize.height / 2
 
-    geometry.vertices[this.i * 2 + 1].x = this.location.current.x - canvasSize.width / 2
-    geometry.vertices[this.i * 2 + 1].y = this.location.current.y - canvasSize.height / 2
+    this.geometry.vertices[this.i * 2 + 1].x = this.location.current.x - this.canvasSize.width / 2
+    this.geometry.vertices[this.i * 2 + 1].y = this.location.current.y - this.canvasSize.height / 2
 
     this.location.previous.x = this.location.current.x
     this.location.previous.y = this.location.current.y
