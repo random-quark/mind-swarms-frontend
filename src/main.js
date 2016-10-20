@@ -4,9 +4,18 @@ function HSB2HSL(h, s, b) {
     return [h, s, l]
 }
 
-(function() {
-    window.onload = getData
+(function(global) {
+    var module = global.swarm = {}
 
+    module.create = function(containerClassName) {
+        var container = document.getElementsByClassName(containerClassName)[0]
+        settings.container = container
+        canvasSize = {
+            width: container.offsetWidth,
+            height: container.offsetHeight
+        }
+        getData()
+    }
 
     var basePath = 'http://localhost:5000'
 
@@ -126,7 +135,7 @@ function HSB2HSL(h, s, b) {
         renderer.autoClearColor = false
         camera.lookAt(scene.position)
 
-        document.body.appendChild(renderer.domElement);
+        settings.container.appendChild(renderer.domElement);
 
         stats.showPanel(1)
         document.body.appendChild(stats.dom)
@@ -171,12 +180,15 @@ function HSB2HSL(h, s, b) {
       textA.style.backgroundImage = gradient
       textB.style.backgroundImage = gradient2
 
-    	textB.id = "swarm-emotion-word"
+      textB.id = "swarm-emotion-word"
 
       overlay.appendChild(logo)
       overlay.appendChild(text)
 
-      document.body.appendChild(overlay)
+      overlay.style.width = canvasSize.width + 'px'
+      overlay.style.height = canvasSize.height + 'px'
+
+      settings.container.appendChild(overlay)
     }
 
     function myDraw() {
@@ -192,4 +204,4 @@ function HSB2HSL(h, s, b) {
 
         requestAnimationFrame(myDraw)
     }
-})()
+})(window)

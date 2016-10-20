@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Emotion swarm demo (random quark)</title>
-  <!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="lib/three.min.js"></script>
   <script src="lib/stats.js"></script>
@@ -12,7 +12,20 @@
   <script src="src/ColorMixer.js"></script>
   <script src="src/Agent.js"></script>
   <script src="src/main.js"></script>
+  <style>
+    body {
+      margin: 20px;
+    }
+    .swarm-container {
+      width: 100%;
+      height: calc(100% - 40px);
+    }
+  </style>
 </head>
 <body>
+  <div class="swarm-container"></div>
+  <script>
+    window.onload = swarm.create('swarm-container')
+  </script>
 </body>
 </html>
