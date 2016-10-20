@@ -7,17 +7,29 @@ function HSB2HSL(h, s, b) {
 (function(global) {
     var module = global.swarm = {}
 
-    module.create = function(containerClassName) {
+    var basePath
+
+    module.create = function(containerClassName, _basePath) {
         var container = document.getElementsByClassName(containerClassName)[0]
         settings.container = container
         canvasSize = {
             width: container.offsetWidth,
             height: container.offsetHeight
         }
+        settings.originalSize = Object.create(canvasSize)
+        basePath = _basePath
         getData()
     }
 
-    var basePath = 'http://localhost:5000'
+    module.resize = function() {
+        canvasSize = {
+            width: settings.container.offsetWidth,
+            height: settings.container.offsetHeight
+        }
+        var ratio = canvasSize.width / settings.originalSize.width
+        camera.zoom = ratio
+        camera.updateProjectionMatrix()
+    }
 
     var canvasSize = {
         width: window.innerWidth,
@@ -76,6 +88,7 @@ function HSB2HSL(h, s, b) {
     var started = false
 
     function getData() {
+        console.log("GETTING DATA")
         function reqListener() {
             var data = JSON.parse(req.responseText)
             settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
@@ -142,8 +155,6 @@ function HSB2HSL(h, s, b) {
 
         myDraw()
     }
-
-    getData()
 
     function addOverlay(emotion, colors) {
     	if (!emotion) emotion = "splendid"
