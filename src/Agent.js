@@ -12,14 +12,14 @@ function Agent(i) {
         new THREE.Vector3(this.location.current.x, this.location.current.y, 1000)
     )
 
-    this.initColor()
+    this.setColor()
 }
 
 Agent.prototype.setLocation = function() {
     this.location = {
         current: {
-            x: Math.floor(Math.random() * canvasSize.width),
-            y: Math.floor(Math.random() * canvasSize.height)
+            x: Math.floor( (Math.random() * (canvasSize.width+limits.range*2) - limits.range) ),
+            y: Math.floor( (Math.random() * (canvasSize.height+limits.range*2) - limits.range) )
         }
     }
     this.location.previous = {
@@ -28,19 +28,23 @@ Agent.prototype.setLocation = function() {
     }
 }
 
-Agent.prototype.initColor = function() {
-    this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
-    var colorHSL = HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
-    var color = new THREE.Color().setHSL(colorHSL[0], colorHSL[1], colorHSL[2])
-    geometry.colors.push(color, color)
+Agent.prototype.constrain = function(value, min, max) {
+    return Math.round(Math.min(Math.max(value, min), max))
 }
 
 Agent.prototype.setColor = function() {
-    this.agentColor = colorMixer.getColor(this.location.current.x, this.location.current.y)
+    var x = this.constrain(this.location.current.x, 0, canvasSize.width-1)
+    var y = this.constrain(this.location.current.y, 0, canvasSize.height-1)
+
+    this.agentColor = colorMixer.getColor(x, y)
     var colorHSL = HSB2HSL(this.agentColor[0], this.agentColor[1], this.agentColor[2])
     var color = new THREE.Color().setHSL(colorHSL[0], colorHSL[1], colorHSL[2])
-    geometry.colors[this.i * 2].set(color)
-    geometry.colors[this.i * 2 + 1].set(color)
+    if (geometry.colors[this.i*2]) {
+      geometry.colors[this.i * 2].set(color)
+      geometry.colors[this.i * 2 + 1].set(color)
+    } else {
+      geometry.colors.push(color, color)
+    }
 }
 
 Agent.prototype.resetAgent = function() {
@@ -68,7 +72,7 @@ Agent.prototype.update = function() {
     this.location.current.y += Math.sin(angle) * this.settings.speed // SLOW +30ms
 
     // INSIGNIFICANT TIME
-    if (this.location.current.x < 0 || this.location.current.x > canvasSize.width || this.location.current.y < 0 || this.location.current.y > canvasSize.height) this.resetAgent()
+    if (this.location.current.x < 0-limits.range || this.location.current.x > canvasSize.width+limits.range || this.location.current.y < 0-limits.range || this.location.current.y > canvasSize.height+limits.range) this.resetAgent()
     this.noiseZ += this.settings.noiseZStep
 
     geometry.vertices[this.i * 2].x = this.location.previous.x - canvasSize.width / 2

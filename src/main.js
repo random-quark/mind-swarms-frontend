@@ -9,8 +9,12 @@ window.onload = getData
 var basePath = 'http://localhost:5000'
 
 var canvasSize = {
-    width: window.innerWidth*0.998,
-    height: window.innerHeight*0.99
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+var limits = {
+    range: 100
 }
 
 var settings = {
