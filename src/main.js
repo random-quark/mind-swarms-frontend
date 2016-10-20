@@ -6,7 +6,7 @@ window.onload = getData
     return [h, s, l]
 }
 
-var basePath = 'https://vast-hamlet-96778.herokuapp.com'
+var basePath = 'http://localhost:5000'
 
 var canvasSize = {
     width: window.innerWidth*0.998,
@@ -159,12 +159,12 @@ function addOverlay(emotion, colors) {
 	var dominantColor = HSB2HSL(colors[0][0], colors[0][1], colors[0][2])
 	var subColor = HSB2HSL(colors[1][0], colors[1][1], colors[1][2])
 
-	var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2]*100 + '%, ' + alpha + ')'
-	var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*100 + '%,' + alpha + ')'
+	var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2]*75 + '%, ' + alpha + ')'
+	var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
 	var gradient = 'linear-gradient(45deg, '+ left +', '+ right + ')'
 
-	left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*100 + '%,' + alpha + ')'
-	right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2]*100 + '%,' + alpha + ')'
+	left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
+	right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
 	var gradient2 = 'linear-gradient(45deg, ' + left + ','+ right +')'
 
   logo.style.backgroundImage = gradient
