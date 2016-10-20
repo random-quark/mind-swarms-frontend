@@ -63,9 +63,6 @@ var camera, scene, renderer, geometry
 geometry = new THREE.Geometry();
 
 var started = false
-var worker
-
-// perlin = noise
 
 function getData() {
     function reqListener() {
@@ -86,25 +83,19 @@ function getData() {
     setTimeout(getData, settings.fetchPeriod * 1000)
 }
 
-// function setColorHiResMixer() {
-//     // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
-//     colorMixer = new ColorMixer(canvasSize, 1, settings.customBlend, ["fear", "anger"], settings.blendFactor)
-// }
-function setColorLowResMixer() {
-    // colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
-    colorMixer = new ColorMixer(canvasSize, 2, settings.customBlend, settings.emotions, settings.blendFactor)
+function createColorMixer() {
+    colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, settings.emotions, settings.blendFactor)
 }
 
 function update() {
-	setColorLowResMixer()
+	createColorMixer()
 	document.getElementById('swarm-emotion-word').innerHTML = settings.word
 }
 
 function init() {
     started = true
     addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
-    setColorLowResMixer()
-    // startWorker()
+    createColorMixer()
 
     // settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
