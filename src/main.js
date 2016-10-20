@@ -29,6 +29,7 @@ var settings = {
     imageChoice: 0,
     debug: false,
     emotions: ['joy', 'anger'],
+    dominantEmotionProportion: 0.5,
     fetchPeriod: 60
 }
 
@@ -71,7 +72,8 @@ function getData() {
         var data = JSON.parse(req.responseText)
         settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
         settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
-				settings.word = data.word
+		settings.word = data.word
+        settings.dominantEmotionProportion = data.dominant[0][1]
         var action = started ? update : init
         action()
     }
@@ -165,7 +167,8 @@ function addOverlay(emotion, colors) {
 
 	var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2]*75 + '%, ' + alpha + ')'
 	var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
-	var gradient = 'linear-gradient(45deg, '+ left +', '+ right + ')'
+	// var gradient = 'linear-gradient(70deg, '+ left + ' ' + (1-settings.dominantEmotionProportion)*100 +'%, '+ right + ')' // TODO: experimenting with making gradient proportionate
+    var gradient = 'linear-gradient(70deg, '+ left + ', '+ right + ')'
 
 	left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
 	right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
