@@ -24,7 +24,6 @@ ColorMixer.prototype.createMixedPalette = function() {
             this.mixedVbo[x].push(c)
         }
     }
-    var t = 0
 }
 
 ColorMixer.prototype.mixColors = function(c1, c2) {
@@ -32,5 +31,4 @@ ColorMixer.prototype.mixColors = function(c1, c2) {
         if (c1[1] < c2[1] * this.blendFactor) return c2
         else return c1
     }
-    // else return blendColor(c1, c2, DARKEST) // MAKE IT YOURSELF BY COPYING PROCESSING CODE
 }

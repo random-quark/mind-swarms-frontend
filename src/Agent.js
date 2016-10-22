@@ -19,6 +19,10 @@ function Agent(i, agentDefaults, canvasSize, limits, geometry, colorMixer) {
     this.setColor()
 }
 
+Agent.prototype.newColorMixer = function(colorMixer) {
+  this.colorMixer = colorMixer
+}
+
 Agent.prototype.setLocation = function() {
     this.location = {
         current: {

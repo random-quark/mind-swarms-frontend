@@ -31,6 +31,12 @@ function HSB2HSL(h, s, b) {
         camera.updateProjectionMatrix()
     }
 
+    module.testNewColor = function() {
+        settings.emotions = ["anger", "surprise"]
+        settings.word = "alarmed"
+        update()
+    }
+
     var canvasSize = {
         width: window.innerWidth,
         height: window.innerHeight
@@ -79,17 +85,20 @@ function HSB2HSL(h, s, b) {
         love: [0, 0.1, 0.8] // RED
     }
 
-    var stats = new Stats();
+    var stats = new Stats()
     var agents = []
     var colorMixer
     var camera, scene, renderer, geometry
-    geometry = new THREE.Geometry();
+    geometry = new THREE.Geometry()
 
     var started = false
 
     function getData() {
-        console.log("GETTING DATA")
         function reqListener() {
+            if (req.status=='404') {
+                reqFailed()
+                return
+            }
             var data = JSON.parse(req.responseText)
             settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
             settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
@@ -99,8 +108,17 @@ function HSB2HSL(h, s, b) {
             action()
         }
 
+        function reqFailed() {
+            console.error("Swarm: failed to connect to sentiment service, loading default emotions")
+            settings.emotions = ["joy", "love"]
+            settings.word = "joyful"
+            settings.dominantEmotionProportion = 0.5
+            init()
+        }
+
         var req = new XMLHttpRequest()
         req.addEventListener('load', reqListener)
+        req.addEventListener('error', reqFailed)
         req.open('GET', basePath + '/sentiment/')
         req.send()
 
@@ -109,11 +127,14 @@ function HSB2HSL(h, s, b) {
 
     function createColorMixer() {
         colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor)
+        for (var i = 0; i < agents.length; i++) {
+            agents[i].newColorMixer(colorMixer)
+        }
     }
 
     function update() {
     	createColorMixer()
-    	document.getElementById('swarm-emotion-word').innerHTML = settings.word
+    	updateOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
     }
 
     function init() {
@@ -121,7 +142,7 @@ function HSB2HSL(h, s, b) {
         addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
         createColorMixer()
 
-        // settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+        settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
         camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
         camera.position.set(0, 0, -10);
@@ -156,26 +177,9 @@ function HSB2HSL(h, s, b) {
         myDraw()
     }
 
-    function addOverlay(emotion, colors) {
-    	if (!emotion) emotion = "splendid"
-
-      var overlay = document.createElement('div')
-      overlay.className = 'swarm-overlay'
-      var logo = document.createElement('div')
-      logo.className = 'logo'
-      var text = document.createElement('div')
-      text.className = 'text'
-      logo.innerHTML = '<img src="assets/ssw-logo.png" height="120">'
-      var textA = document.createElement('span')
-      var textB = document.createElement('span')
-      textA.appendChild(document.createTextNode('Today the world is feeling'))
-      textB.appendChild(document.createTextNode(emotion))
-      text.appendChild(textA)
-      text.appendChild(textB)
-
-    	var alpha = 0.75
-
-    	var dominantColor = HSB2HSL(colors[0][0], colors[0][1], colors[0][2])
+    function buildGradients(colors) {
+        var alpha = 0.75
+        var dominantColor = HSB2HSL(colors[0][0], colors[0][1], colors[0][2])
     	var subColor = HSB2HSL(colors[1][0], colors[1][1], colors[1][2])
 
     	var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2]*75 + '%, ' + alpha + ')'
@@ -187,19 +191,56 @@ function HSB2HSL(h, s, b) {
     	right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
     	var gradient2 = 'linear-gradient(45deg, ' + left + ','+ right +')'
 
-      logo.style.backgroundImage = gradient
-      textA.style.backgroundImage = gradient
-      textB.style.backgroundImage = gradient2
+        return [gradient, gradient2]
+    }
 
-      textB.id = "swarm-emotion-word"
+    function updateOverlay(emotion, colors) {
+        var logo = document.getElementById('swarm-logo')
+        var textA = document.getElementById('swarm-text')
+        var textB = document.getElementById('swarm-emotion-word')
 
-      overlay.appendChild(logo)
-      overlay.appendChild(text)
+        var gradients = buildGradients(colors)
 
-      overlay.style.width = canvasSize.width + 'px'
-      overlay.style.height = canvasSize.height + 'px'
+        logo.style.backgroundImage = gradients[0]
+        textA.style.backgroundImage = gradients[0]
+        textB.innerHTML = emotion
+        textB.style.backgroundImage = gradients[1]
+    }
 
-      settings.container.appendChild(overlay)
+    function addOverlay(emotion, colors) {
+    	if (!emotion) emotion = "splendid"
+
+        var overlay = document.createElement('div')
+        overlay.className = 'swarm-overlay'
+        var logo = document.createElement('div')
+        logo.className = 'logo'
+        var text = document.createElement('div')
+        text.className = 'text'
+        logo.innerHTML = '<img src="assets/ssw-logo.png" height="120">'
+        var textA = document.createElement('span')
+        var textB = document.createElement('span')
+        textA.appendChild(document.createTextNode('Today the world is feeling'))
+        textB.appendChild(document.createTextNode(emotion))
+        text.appendChild(textA)
+        text.appendChild(textB)
+
+        var gradients = buildGradients(colors)
+
+        logo.style.backgroundImage = gradients[0]
+        textA.style.backgroundImage = gradients[0]
+        textB.style.backgroundImage = gradients[1]
+
+        logo.id = "swarm-logo"
+        textA.id = "swarm-text"
+        textB.id = "swarm-emotion-word"
+
+        overlay.appendChild(logo)
+        overlay.appendChild(text)
+
+        overlay.style.width = canvasSize.width + 'px'
+        overlay.style.height = canvasSize.height + 'px'
+
+        settings.container.appendChild(overlay)
     }
 
     function myDraw() {
