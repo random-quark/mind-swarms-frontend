@@ -142,7 +142,7 @@ function HSB2HSL(h, s, b) {
         addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
         createColorMixer()
 
-        settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+        // settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
 
         camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
         camera.position.set(0, 0, -10);
