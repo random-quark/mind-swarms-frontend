@@ -19,11 +19,6 @@ function HSB2HSL(h, s, b) {
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
-
-        module.settings = settings
-        module.canvasSize = canvasSize
-        console.log(module.settings)
-        console.log(module.canvasSize)
     }
 
     module.resize = function() {
@@ -55,7 +50,7 @@ function HSB2HSL(h, s, b) {
         agents: 70000,
         sizeAgentRatio: 0.033,
         fadeAlpha: 0,
-        noiseDet: 4,
+        noiseDet: 2,
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
@@ -69,7 +64,7 @@ function HSB2HSL(h, s, b) {
     }
 
     var agentDefaults = {
-        noiseScale: 200,
+        noiseScale: 100,
         randomSeed: 0,
         agentsAlpha: 20,
         strokeWidth: 2,
@@ -132,7 +127,7 @@ function HSB2HSL(h, s, b) {
     }
 
     function createColorMixer() {
-        colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed)
+        colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed, settings.noiseDet)
         for (var i = 0; i < agents.length; i++) {
             agents[i].newColorMixer(colorMixer)
         }

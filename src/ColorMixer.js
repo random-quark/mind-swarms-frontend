@@ -1,4 +1,4 @@
-function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsColors, emotionsList, _blendFactor, originalNoiseSeed) {
+function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsColors, emotionsList, _blendFactor, originalNoiseSeed, originalNoiseDet) {
     this.blendFactor = _blendFactor
     this.mixedVbo = [[]]
     var colorData1 = emotionsColors[emotionsList[0]]
@@ -6,8 +6,8 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsColors,
     this.customBlend = customBlend
     this.canvasSize = canvasSize
     this.palettes = [
-        new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData1, originalNoiseSeed),
-        new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData2, originalNoiseSeed)
+        new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData1, originalNoiseSeed, originalNoiseDet),
+        new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData2, originalNoiseSeed, originalNoiseDet)
     ]
     this.createMixedPalette()
 }
