@@ -13,3 +13,7 @@ swarm.create('swarm-container', 'http://server.com/api-root/'); // element class
 ```
 
 The visualisation will render itself into the element and make a call to the basepath + `/sentiment` to fetch data.
+
+The responsive design looking correct depends on this meta tag being present in the `<head>`:
+
+```<meta name="viewport" content="width=device-width, initial-scale=1.0">```

@@ -19,6 +19,11 @@ function HSB2HSL(h, s, b) {
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
+
+        module.settings = settings
+        module.canvasSize = canvasSize
+        console.log(module.settings)
+        console.log(module.canvasSize)
     }
 
     module.resize = function() {
@@ -236,7 +241,7 @@ function HSB2HSL(h, s, b) {
         logo.className = 'logo'
         var text = document.createElement('div')
         text.className = 'text'
-        logo.innerHTML = '<img src="assets/ssw-logo.png" height="120">'
+        logo.innerHTML = '<img src="assets/ssw-logo.png">'
         var textA = document.createElement('span')
         var textB = document.createElement('span')
         textA.appendChild(document.createTextNode('Today the world is feeling'))

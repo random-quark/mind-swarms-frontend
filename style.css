@@ -23,6 +23,17 @@
   padding: 30px;
   text-align: center;
   font-size: 25px;
+  width: 261px;
+  max-width: 60%;
+}
+
+.swarm-overlay .logo img {
+  width: 100%;
+}
+
+.swarm-overlay .text {
+  max-width: 90%;
+  text-align: center;
 }
 
 .swarm-overlay .text span {
@@ -30,4 +41,7 @@
   font-size: 20px;
   padding: 6px;
   margin-right: 10px;
+  margin-bottom: 30px;
+  /*text-align: center;*/
+  display: inline-block;
 }
