@@ -16,6 +16,7 @@ function HSB2HSL(h, s, b) {
             width: container.offsetWidth,
             height: container.offsetHeight
         }
+        agentDefaults.noiseScale = canvasSize.width * 0.13
         console.log(agentDefaults.noiseScale)
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
