@@ -164,7 +164,7 @@ function HSB2HSL(h, s, b) {
         scene.add(line);
         renderer = new THREE.WebGLRenderer({
             preserveDrawingBuffer: true,
-            antialias: true,
+            // antialias: true, // FIXME: turned off because it breaks preserveDrawingBuffer in iOS
             alpha: true,
         });
         renderer.setClearColor(0xffffff, 0)
@@ -172,9 +172,6 @@ function HSB2HSL(h, s, b) {
         renderer.setSize(canvasSize.width, canvasSize.height)
         renderer.sortObjects = false
         renderer.autoClearColor = false
-
-        renderer.autoClear = false;
-        renderer.clear();
 
         camera.lookAt(scene.position)
 
@@ -184,6 +181,20 @@ function HSB2HSL(h, s, b) {
         document.body.appendChild(stats.dom)
 
         myDraw()
+    }
+
+    function myDraw() {
+        stats.begin()
+        for (var i = 0; i < agents.length; i++) {
+            agents[i].update()
+        }
+        stats.end()
+
+        geometry.verticesNeedUpdate = true;
+        geometry.colorsNeedUpdate = true
+        renderer.render(scene, camera)
+
+        requestAnimationFrame(myDraw)
     }
 
     function buildGradients(colors) {
@@ -263,19 +274,5 @@ function HSB2HSL(h, s, b) {
         overlay.style.height = canvasSize.height + 'px'
 
         settings.container.appendChild(overlay)
-    }
-
-    function myDraw() {
-        stats.begin()
-        for (var i = 0; i < agents.length; i++) {
-            agents[i].update()
-        }
-        stats.end()
-
-        geometry.verticesNeedUpdate = true;
-        geometry.colorsNeedUpdate = true
-        renderer.render(scene, camera)
-
-        requestAnimationFrame(myDraw)
     }
 })(window)
