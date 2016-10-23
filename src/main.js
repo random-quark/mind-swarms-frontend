@@ -148,7 +148,6 @@ function HSB2HSL(h, s, b) {
         createColorMixer()
 
         settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
-        console.log(settings.agents)
 
         camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
         camera.position.set(0, 0, -10);
@@ -173,6 +172,10 @@ function HSB2HSL(h, s, b) {
         renderer.setSize(canvasSize.width, canvasSize.height)
         renderer.sortObjects = false
         renderer.autoClearColor = false
+
+        renderer.autoClear = false;
+        renderer.clear();
+
         camera.lookAt(scene.position)
 
         settings.container.appendChild(renderer.domElement);
