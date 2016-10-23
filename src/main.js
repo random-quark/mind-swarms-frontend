@@ -7,7 +7,7 @@ function HSB2HSL(h, s, b) {
 (function(global) {
     var module = global.swarm = {}
 
-    var basePath
+    var basePath, canvasSize
 
     module.create = function(containerClassName, _basePath) {
         var container = document.getElementsByClassName(containerClassName)[0]
@@ -16,6 +16,7 @@ function HSB2HSL(h, s, b) {
             width: container.offsetWidth,
             height: container.offsetHeight
         }
+        console.log(agentDefaults.noiseScale)
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
@@ -35,11 +36,6 @@ function HSB2HSL(h, s, b) {
         settings.emotions = ["anger", "surprise"]
         settings.word = "alarmed"
         update()
-    }
-
-    var canvasSize = {
-        width: window.innerWidth,
-        height: window.innerHeight
     }
 
     var limits = {
