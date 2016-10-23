@@ -140,6 +140,13 @@ function HSB2HSL(h, s, b) {
     function init() {
         started = true
         addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
+
+        var supportsWebGL = ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )();
+        if (!supportsWebGL) {
+          addFallbackImage(settings.emotions)
+          return
+        }
+
         createColorMixer()
 
         // settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
@@ -205,6 +212,19 @@ function HSB2HSL(h, s, b) {
         textA.style.backgroundImage = gradients[0]
         textB.innerHTML = emotion
         textB.style.backgroundImage = gradients[1]
+    }
+
+    function addFallbackImage(emotions) {
+        var background = document.createElement('img')
+        emotions.sort(function(a, b) {
+            if (a<b) return -1
+            if (a>b) return 1
+            return 0
+        })
+        background.src = 'assets/fallback-images/' + emotions[0] + '-' + emotions[1] + '.png'
+
+        background.className = 'fallback-image'
+        settings.container.appendChild(background)
     }
 
     function addOverlay(emotion, colors) {

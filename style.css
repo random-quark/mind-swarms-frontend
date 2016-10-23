@@ -10,6 +10,14 @@
   flex-direction: column;
 }
 
+.swarm-container {
+  overflow: hidden;
+}
+
+.swarm-container .fallback-image {
+  width: 100%;
+}
+
 .swarm-overlay .logo {
   margin-bottom: 100px;
   padding: 30px;
