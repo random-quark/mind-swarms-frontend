@@ -56,6 +56,7 @@ function HSB2HSL(h, s, b) {
         sizeAgentRatio: 0.033,
         fadeAlpha: 0,
         noiseDet: 4,
+        noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
         paletteScaleFactor: 2,
@@ -131,7 +132,7 @@ function HSB2HSL(h, s, b) {
     }
 
     function createColorMixer() {
-        colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor)
+        colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed)
         for (var i = 0; i < agents.length; i++) {
             agents[i].newColorMixer(colorMixer)
         }

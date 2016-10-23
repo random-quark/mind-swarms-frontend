@@ -1,4 +1,4 @@
-function Palette(_width, _height, paletteScaleFactor, colorData) {
+function Palette(_width, _height, paletteScaleFactor, colorData, originalNoiseSeed) {
     customNoise.noiseDetail(10)
     customNoise.noiseSeed(Math.random()*10000) // needed so that marbles are not the same (otherwise sometimes they are)
     this.paletteScaleFactor = paletteScaleFactor
@@ -18,6 +18,7 @@ function Palette(_width, _height, paletteScaleFactor, colorData) {
     this.randomXoffset = Math.random()*1000
     this.randomYoffset = Math.random()*5000
     this.createMarble()
+    customNoise.noiseSeed(originalNoiseSeed)
 }
 
 Palette.prototype.getColor = function(_x, _y) {
