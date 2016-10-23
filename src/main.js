@@ -50,7 +50,7 @@ function HSB2HSL(h, s, b) {
         agents: 70000,
         sizeAgentRatio: 0.033,
         fadeAlpha: 0,
-        noiseDet: 2,
+        noiseDet: 5,
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
@@ -64,7 +64,7 @@ function HSB2HSL(h, s, b) {
     }
 
     var agentDefaults = {
-        noiseScale: 100,
+        noiseScale: 150,
         randomSeed: 0,
         agentsAlpha: 20,
         strokeWidth: 2,
