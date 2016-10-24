@@ -30,6 +30,12 @@
   height: 120px;
 }
 
+@media (max-width: 968px) {
+  .swarm-overlay .logo {
+    height: auto;
+  }
+}
+
 .swarm-overlay .logo img {
   width: 100%;
 }

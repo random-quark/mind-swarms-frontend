@@ -45,7 +45,7 @@ function HSB2HSL(h, s, b) {
     var settings = {
         agents: 70000,
         widthNoiseScaleRatio: 0.13,
-        sizeAgentRatio: 0.033,
+        sizeAgentRatio: 0.1,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
@@ -163,6 +163,9 @@ function HSB2HSL(h, s, b) {
         createColorMixer()
 
         settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+        settings.agents = Math.max(Math.min(20000, settings.agents), settings.agents)
+
+        // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
 
         camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
         camera.position.set(0, 0, -10);
