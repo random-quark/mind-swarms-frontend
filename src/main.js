@@ -139,7 +139,22 @@ function HSB2HSL(h, s, b) {
         started = true
         addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
 
-        var supportsWebGL = ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )();
+        var supportsWebGL = (function(){
+            if(( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()){
+                var _canvas = document.createElement( 'canvas' );
+                var _gl = _canvas.getContext( 'webgl' ) || _canvas.getContext( 'experimental-webgl' );
+                var errors;
+                try{
+                    _gl.clearStencil( 0 );
+                    errors=_gl.getError();
+                }catch(e){
+                    return false;
+                }
+                return errors === 0;
+            }else{
+                return false;
+            }
+        })()
         if (!supportsWebGL) {
           addFallbackImage(settings.emotions)
           return
