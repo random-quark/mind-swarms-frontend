@@ -140,7 +140,6 @@ function HSB2HSL(h, s, b) {
         addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
 
         var supportsWebGL = ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )();
-        supportsWebGL = false
         if (!supportsWebGL) {
           addFallbackImage(settings.emotions)
           return
