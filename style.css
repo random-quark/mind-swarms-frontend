@@ -15,7 +15,10 @@
 }
 
 .swarm-container .fallback-image {
-  width: 100%;
+  height: 100%;
+  background: url(images/bg.jpg) no-repeat center center fixed;   
+  background-size: cover;
+
 }
 
 .swarm-overlay .logo {
