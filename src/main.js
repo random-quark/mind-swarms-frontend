@@ -235,7 +235,7 @@ function HSB2HSL(h, s, b) {
             if (a>b) return 1
             return 0
         })
-        background.style.backgroundImage = 'url(assets/fallback-images/' + emotions[0] + '-' + emotions[1] + '.png)'
+        background.style.backgroundImage = 'url(assets/fallback-images/' + emotions[0] + '-' + emotions[1] + '.jpg)'
         background.className = 'fallback-image'
         settings.container.appendChild(background)
     }
