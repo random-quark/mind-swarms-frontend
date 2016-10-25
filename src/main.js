@@ -202,6 +202,19 @@ function HSB2HSL(h, s, b) {
         myDraw()
     }
 
+    function onResize() {
+        canvasSize = {
+            width: settings.container.offsetWidth,
+            height: settings.container.offsetHeight
+        }
+        renderer.setSize(canvasSize.width, canvasSize.height)
+        var overlay = document.getElementsByClassName('swarm-overlay')[0]
+        overlay.style.width = canvasSize.width + 'px'
+        overlay.style.height = canvasSize.height + 'px'
+    }
+
+    global.addEventListener('resize', onResize)
+
     function myDraw() {
         stats.begin()
         for (var i = 0; i < agents.length; i++) {
