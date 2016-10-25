@@ -84,7 +84,7 @@ function HSB2HSL(h, s, b) {
         love: [0, 0.1, 0.8] // RED
     }
 
-    var stats = new Stats()
+    if (window.debug) var stats = new Stats()
     var agents = []
     var colorMixer
     var camera, scene, renderer, geometry
@@ -197,8 +197,8 @@ function HSB2HSL(h, s, b) {
 
         settings.container.appendChild(renderer.domElement);
 
-        stats.showPanel(1)
-        document.body.appendChild(stats.dom)
+        if (window.debug) stats.showPanel(1)
+        if (window.debug) document.body.appendChild(stats.dom)
 
         myDraw()
     }
@@ -217,11 +217,11 @@ function HSB2HSL(h, s, b) {
     global.addEventListener('resize', onResize)
 
     function myDraw() {
-        stats.begin()
+        if (window.debug) stats.begin()
         for (var i = 0; i < agents.length; i++) {
             agents[i].update()
         }
-        stats.end()
+        if (window.debug) stats.end()
 
         geometry.verticesNeedUpdate = true;
         geometry.colorsNeedUpdate = true
@@ -307,4 +307,4 @@ function HSB2HSL(h, s, b) {
 
         settings.container.appendChild(overlay)
     }
-})(window)
+})(window);

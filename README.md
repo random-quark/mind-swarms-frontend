@@ -4,12 +4,14 @@ This is the web version built for the Saatchi & Saatchi Wellness homepage. It is
 
 To add to a page, include `three.min.js`, `build/swarm.js`, `style.css` files on your page. To include on the page:
 
+*Note:* if you update any of the source files run `./build.sh` on the command line.
+
 ```
 <div class="swarm-container"></div>
 ```
 
 ```
-swarm.create('swarm-container', 'http://server.com/api-root/'); // element class, API basePath
+swarm.create('swarm-container', 'http://server.com/api-root'); // element class, API basePath without trailing slash
 ```
 
 The visualisation will render itself into the element and make a call to the basepath + `/sentiment` to fetch data.
