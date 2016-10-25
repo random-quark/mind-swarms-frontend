@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emotion swarm demo (random quark)</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="lib/three.min.js"></script>
+  <script src="build/swarm.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 20px;
+    }
+    .swarm-container {
+      width: 100%;
+      height: calc(100% - 40px);
+    }
+  </style>
+</head>
+<body>
+  <div class="swarm-container"></div>
+  <script>
+    window.onload = swarm.create('swarm-container', 'https://vast-hamlet-96778.herokuapp.com')
+  </script>
+</body>
+</html>
