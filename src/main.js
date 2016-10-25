@@ -155,7 +155,8 @@ function HSB2HSL(h, s, b) {
                 return false;
             }
         })()
-        if (!supportsWebGL) {
+        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (!supportsWebGL || iOS) {
           addFallbackImage(settings.emotions)
           return
         }
