@@ -1,6 +1,8 @@
 # Mindswarms web version
 
-This is the web version built for the Saatchi & Saatchi Wellness homepage. It is a live visualisation that depends on the server being set up from [https://github.com/random-quark/mind-swarms-backend](mind-swarms-backend). The visualisation uses the three.js library for fast drawing in WebGL.
+This is the web version built for the Saatchi & Saatchi Wellness homepage. It is a live visualisation that depends on the server being set up from [mind-swarms-backend](https://github.com/random-quark/mind-swarms-backend). The visualisation uses the three.js library for fast drawing in WebGL. See a [live demo version](http://random-quark.github.io/mind-swarms-frontend/build-demo.html).
+
+For further help please contact hello@randomquark.com
 
 To add to a page, include `three.min.js`, `build/swarm.js`, `style.css` files on your page. To include on the page:
 
