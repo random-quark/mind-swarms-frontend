@@ -44,6 +44,7 @@ function HSB2HSL(h, s, b) {
 
     var settings = {
         agents: 70000,
+        minAgents: 20000,
         widthNoiseScaleRatio: 0.13,
         sizeAgentRatio: 0.1,
         fadeAlpha: 0,
@@ -164,7 +165,7 @@ function HSB2HSL(h, s, b) {
         createColorMixer()
 
         settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
-        settings.agents = Math.max(Math.min(20000, settings.agents), settings.agents)
+        settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
 
         // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
 
