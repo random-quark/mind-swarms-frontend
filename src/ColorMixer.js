@@ -5,10 +5,12 @@ function ColorMixer(canvasSize, paletteScaleFactor, customBlend, emotionsColors,
     var colorData2 = emotionsColors[emotionsList[1]]
     this.customBlend = customBlend
     this.canvasSize = canvasSize
+
     this.palettes = [
         new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData1, originalNoiseSeed, originalNoiseDet),
         new Palette(canvasSize.width, canvasSize.height, paletteScaleFactor, colorData2, originalNoiseSeed, originalNoiseDet)
     ]
+    
     this.createMixedPalette()
 }
 

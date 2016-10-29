@@ -20,7 +20,7 @@ function HSB2HSL(h, s, b) {
             width: container.offsetWidth/2,
             height: container.offsetHeight/2
         }
-        agentDefaults.noiseScale = Math.max(Math.min(canvasSize.width * settings.widthNoiseScaleRatio, 250), 150)
+        agentDefaults.noiseScale = 125 ;// Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 150) //FIX ME (make it dynamic)
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
@@ -43,7 +43,7 @@ function HSB2HSL(h, s, b) {
     }
 
     var limits = {
-        range: 100
+        range: 50
     }
 
     var settings = {
@@ -56,7 +56,7 @@ function HSB2HSL(h, s, b) {
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
-        paletteScaleFactor: 2,
+        paletteScaleFactor: 1,
         customBlend: true,
         imageChoice: 0,
         debug: false,
@@ -129,7 +129,7 @@ function HSB2HSL(h, s, b) {
     }
 
     function createColorMixer() {
-        colorMixer = new ColorMixer(canvasSize, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed, settings.noiseDet)
+        colorMixer = new ColorMixer(resizedCanvas, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed, settings.noiseDet)
         for (var i = 0; i < agents.length; i++) {
             agents[i].newColorMixer(colorMixer)
         }
@@ -170,12 +170,12 @@ function HSB2HSL(h, s, b) {
 
         settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
         settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
-        settings.agents = 25000 //FIX IT (remove this line)
+        settings.agents = 45000 //FIX IT (remove this line)
         // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
 
         // camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
-        camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 2000);
-        camera.position.set(0, 0, -750);
+        camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
+        camera.position.set(0, 0, -650);
         scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({
             vertexColors: THREE.VertexColors,
