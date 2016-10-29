@@ -12,8 +12,8 @@ function Agent(i, agentDefaults, canvasSize, limits, geometry, colorMixer) {
     this.setLocation()
 
     geometry.vertices.push(
-        new THREE.Vector3(this.location.previous.x, this.location.previous.y, 1000),
-        new THREE.Vector3(this.location.current.x, this.location.current.y, 1000)
+        new THREE.Vector3(this.location.previous.x, this.location.previous.y, 0),
+        new THREE.Vector3(this.location.current.x, this.location.current.y, 0)
     )
 
     this.setColor()

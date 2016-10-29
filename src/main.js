@@ -7,7 +7,7 @@ function HSB2HSL(h, s, b) {
 (function(global) {
     var module = global.swarm = {}
 
-    var basePath, canvasSize
+    var basePath, canvasSize, resizedCanvas
 
     module.create = function(containerClassName, _basePath) {
         var container = document.getElementsByClassName(containerClassName)[0]
@@ -15,6 +15,10 @@ function HSB2HSL(h, s, b) {
         canvasSize = {
             width: container.offsetWidth,
             height: container.offsetHeight
+        }
+        resizedCanvas = {
+            width: container.offsetWidth/2,
+            height: container.offsetHeight/2
         }
         agentDefaults.noiseScale = Math.max(Math.min(canvasSize.width * settings.widthNoiseScaleRatio, 250), 150)
         settings.originalSize = Object.create(canvasSize)
@@ -166,11 +170,12 @@ function HSB2HSL(h, s, b) {
 
         settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
         settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
-
+        settings.agents = 25000 //FIX IT (remove this line)
         // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
 
-        camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
-        camera.position.set(0, 0, -10);
+        // camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
+        camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 2000);
+        camera.position.set(0, 0, -750);
         scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({
             vertexColors: THREE.VertexColors,
@@ -179,7 +184,7 @@ function HSB2HSL(h, s, b) {
             linewidth: 1
         })
 
-        for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i, agentDefaults, canvasSize, limits, geometry, colorMixer))
+        for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i, agentDefaults, resizedCanvas, limits, geometry, colorMixer))
         var line = new THREE.LineSegments(geometry, material);
         scene.add(line);
         renderer = new THREE.WebGLRenderer({
