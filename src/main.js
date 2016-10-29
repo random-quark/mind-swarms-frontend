@@ -20,7 +20,8 @@ function HSB2HSL(h, s, b) {
             width: container.offsetWidth/2,
             height: container.offsetHeight/2
         }
-        agentDefaults.noiseScale = 125 ;// Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 150) //FIX ME (make it dynamic)
+        agentDefaults.noiseScale = Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 120) //FIX ME (make it dynamic)
+        console.log(agentDefaults.noiseScale)
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
@@ -50,13 +51,13 @@ function HSB2HSL(h, s, b) {
         agents: 70000,
         minAgents: 20000,
         widthNoiseScaleRatio: 0.13,
-        sizeAgentRatio: 0.1,
+        sizeAgentRatio: 0.115,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
-        paletteScaleFactor: 1,
+        paletteScaleFactor: 2,
         customBlend: true,
         imageChoice: 0,
         debug: false,
@@ -168,10 +169,10 @@ function HSB2HSL(h, s, b) {
 
         createColorMixer()
 
-        settings.agents = (canvasSize.width * canvasSize.height) * settings.sizeAgentRatio
+        settings.agents = (resizedCanvas.width * resizedCanvas.height) * settings.sizeAgentRatio
         settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
-        settings.agents = 45000 //FIX IT (remove this line)
         // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
+        console.log(settings.agents)
 
         // camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
         camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
