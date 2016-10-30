@@ -52,8 +52,8 @@ function HSB2HSL(h, s, b) {
         agents: 70000, //not used any more
         minAgents: 20000, // not used any more
         widthNoiseScaleRatio: 0.13,
-        verticalSizeAgentRatio: 0.1,
-        horizontalSizeAgentRatio: 0.24,
+        verticalSizeAgentRatio: 0.11,
+        horizontalSizeAgentRatio: 0.26,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
