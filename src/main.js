@@ -17,10 +17,13 @@ function HSB2HSL(h, s, b) {
             height: container.offsetHeight
         }
         resizedCanvas = {
-            width: container.offsetWidth/2,
-            height: container.offsetHeight/2
+            width: 600,//container.offsetWidth/2,
+            height: 600 / (container.offsetWidth/container.offsetHeight)//container.offsetHeight/2
         }
-        agentDefaults.noiseScale = Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 120) //FIX ME (make it dynamic)
+        console.log("container: ", container.offsetWidth, container.offsetHeight)
+        console.log("resizedCanvas: ", resizedCanvas)
+        // agentDefaults.noiseScale = Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 120)
+        agentDefaults.noiseScale = 100  //FIX ME (make it dynamic)
         console.log(agentDefaults.noiseScale)
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
@@ -57,7 +60,7 @@ function HSB2HSL(h, s, b) {
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
         blendFactor: 0.2,
-        paletteScaleFactor: 2,
+        paletteScaleFactor: 1,
         customBlend: true,
         imageChoice: 0,
         debug: false,
@@ -172,15 +175,16 @@ function HSB2HSL(h, s, b) {
         settings.agents = (resizedCanvas.width * resizedCanvas.height) * settings.sizeAgentRatio
         settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
         // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
+        settings.agents = 40000
         console.log(settings.agents)
 
-        // camera = new THREE.OrthographicCamera( canvasSize.width / - 2, canvasSize.width / 2, canvasSize.height / 2, canvasSize.height / - 2, 0.1, 10000 );
-        camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
-        camera.position.set(0, 0, -650);
+        camera = new THREE.OrthographicCamera( resizedCanvas.width / - 2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / - 2, 0.1, 10000 );
+        // camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
+        camera.position.set(0, 0, -450);
         scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({
             vertexColors: THREE.VertexColors,
-            opacity: 0.1,
+            opacity: 0.1, //FIX ME 0.1
             transparent: true,
             linewidth: 1
         })
@@ -188,6 +192,33 @@ function HSB2HSL(h, s, b) {
         for (var i = 0; i < settings.agents; i++) agents.push(new Agent(i, agentDefaults, resizedCanvas, limits, geometry, colorMixer))
         var line = new THREE.LineSegments(geometry, material);
         scene.add(line);
+
+        //debugging cubes: FIX ME - remove these cubes
+        var cubeGeometry = new THREE.BoxGeometry(14, 14, 14);
+        var cubeMaterial = new THREE.MeshLambertMaterial();
+        cubeMaterial.color = new THREE.Color(255, 0, 0);
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.x = resizedCanvas.width / -2
+        cube.position.y = resizedCanvas.height / -2
+        cube.position.z = 0
+        scene.add(cube);
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.x = resizedCanvas.width / 2
+        cube.position.y = resizedCanvas.height / -2
+        cube.position.z = 0
+        scene.add(cube);
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.x = resizedCanvas.width / 2
+        cube.position.y = resizedCanvas.height / 2
+        cube.position.z = 0
+        scene.add(cube);
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.x = resizedCanvas.width / -2
+        cube.position.y = resizedCanvas.height / 2
+        cube.position.z = 0
+        scene.add(cube);
+
+
         renderer = new THREE.WebGLRenderer({
             preserveDrawingBuffer: true,
             // antialias: true, // FIXME: turned off because it breaks preserveDrawingBuffer in iOS
