@@ -17,16 +17,15 @@ function HSB2HSL(h, s, b) {
             height: container.offsetHeight
         }
         resizedCanvas = {
-            width: 600,//container.offsetWidth/2,
-            height: 600 / (container.offsetWidth/container.offsetHeight)//container.offsetHeight/2
+            width: 600,
+            height: 600 / (container.offsetWidth/container.offsetHeight)
         }
-        console.log("container: ", container.offsetWidth, container.offsetHeight)
-        console.log("resizedCanvas: ", resizedCanvas)
-        // agentDefaults.noiseScale = Math.max(Math.min(resizedCanvas.width * settings.widthNoiseScaleRatio, 250), 120)
-        agentDefaults.noiseScale = (resizedCanvas.width * resizedCanvas.height)*100/(600*342) //FIX ME (clean it up)
-        console.log("scaleRate: ", agentDefaults.noiseScale)
+        // console.log("container: ", container.offsetWidth, container.offsetHeight)
+        // console.log("resizedCanvas: ", resizedCanvas)
 
-        console.log(agentDefaults.noiseScale)
+        agentDefaults.noiseScale = calculateNoiseScale()
+        // console.log("scaleRate: ", agentDefaults.noiseScale)
+
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
@@ -37,9 +36,6 @@ function HSB2HSL(h, s, b) {
             width: settings.container.offsetWidth,
             height: settings.container.offsetHeight
         }
-        var ratio = canvasSize.width / settings.originalSize.width
-        camera.zoom = ratio
-        camera.updateProjectionMatrix()
     }
 
     module.testNewColor = function() {
@@ -53,10 +49,11 @@ function HSB2HSL(h, s, b) {
     }
 
     var settings = {
-        agents: 70000,
-        minAgents: 20000,
+        agents: 70000, //not used any more
+        minAgents: 20000, // not used any more
         widthNoiseScaleRatio: 0.13,
-        sizeAgentRatio: 0.115,
+        verticalSizeAgentRatio: 0.1,
+        horizontalSizeAgentRatio: 0.24,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
@@ -133,6 +130,9 @@ function HSB2HSL(h, s, b) {
 
         setTimeout(getData, settings.fetchPeriod * 1000)
     }
+    function calculateNoiseScale(){
+      return (resizedCanvas.width * resizedCanvas.height)*100/(600*342)  //setting the noiseScale based on surface area not on width (so that it can work on all screen ratios)
+    }
 
     function createColorMixer() {
         colorMixer = new ColorMixer(resizedCanvas, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed, settings.noiseDet)
@@ -173,20 +173,18 @@ function HSB2HSL(h, s, b) {
         }
 
         createColorMixer()
-
-        settings.agents = (resizedCanvas.width * resizedCanvas.height) * settings.sizeAgentRatio
-        settings.agents = Math.max(Math.min(settings.minAgents, settings.agents), settings.agents)
-        // alert((canvasSize.width * canvasSize.height) * settings.sizeAgentRatio)
-        settings.agents = 40000
+        if (resizedCanvas.width>resizedCanvas.height) settings.agents = resizedCanvas.width * resizedCanvas.height * settings.horizontalSizeAgentRatio;
+        else settings.agents = resizedCanvas.width * resizedCanvas.height * settings.verticalSizeAgentRatio
+        // console.log(resizedCanvas.width, resizedCanvas.height, settings.sizeAgentRatio)
         console.log(settings.agents)
 
         camera = new THREE.OrthographicCamera( resizedCanvas.width / - 2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / - 2, 0.1, 10000 );
         // camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
-        camera.position.set(0, 0, -450);
+        camera.position.set(0, 0, -450); //makes no diff if it's -450 or -45.
         scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({
             vertexColors: THREE.VertexColors,
-            opacity: .15, //FIX ME 0.1
+            opacity: .1,
             transparent: true,
             linewidth: 1
         })
@@ -243,10 +241,24 @@ function HSB2HSL(h, s, b) {
     }
 
     function onResize() {
+
         canvasSize = {
             width: settings.container.offsetWidth,
             height: settings.container.offsetHeight
         }
+        resizedCanvas = {
+            width: 600,
+            height: 600 / (canvasSize.width/canvasSize.height)
+        }
+
+        agentDefaults.noiseScale = calculateNoiseScale()
+
+        camera.left = resizedCanvas.width / - 2
+        camera.right = resizedCanvas.width / 2
+        camera.top = resizedCanvas.height / 2
+        camera.bottom = resizedCanvas.height / - 2
+        camera.updateProjectionMatrix()
+
         renderer.setSize(canvasSize.width, canvasSize.height)
         var overlay = document.getElementsByClassName('swarm-overlay')[0]
         overlay.style.width = canvasSize.width + 'px'

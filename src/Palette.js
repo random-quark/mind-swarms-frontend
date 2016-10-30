@@ -14,7 +14,7 @@ function Palette(_width, _height, paletteScaleFactor, colorData, originalNoiseSe
     this.c = colorData[0] / 360
     this.hueRange = colorData[1]
     this.minMarbleBrightness = colorData[2]
-    this.noiseStep = 0.005
+    this.noiseStep = 0.005*2 // doubled it for more variety
     this.randomXoffset = Math.random()*1000
     this.randomYoffset = Math.random()*5000
     this.createMarble()
