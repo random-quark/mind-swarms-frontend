@@ -186,7 +186,7 @@ function HSB2HSL(h, s, b) {
         scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({
             vertexColors: THREE.VertexColors,
-            opacity: 0.1, //FIX ME 0.1
+            opacity: .15, //FIX ME 0.1
             transparent: true,
             linewidth: 1
         })
