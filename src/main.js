@@ -16,15 +16,24 @@ function HSB2HSL(h, s, b) {
             width: container.offsetWidth,
             height: container.offsetHeight
         }
-        resizedCanvas = {
-            width: 600,
-            height: 600 / (container.offsetWidth/container.offsetHeight)
+
+        //calculating resizedCanvas based on screen orientation
+        if (canvasSize.width > canvasSize.height) {
+            resizedCanvas = {
+                width: 600,
+                height: 600 / (container.offsetWidth / container.offsetHeight)
+            }
+        } else {
+            resizedCanvas = {
+                width: 600 / (container.offsetHeight / container.offsetWidth),
+                height: 600
+            }
         }
         // console.log("container: ", container.offsetWidth, container.offsetHeight)
         // console.log("resizedCanvas: ", resizedCanvas)
 
         agentDefaults.noiseScale = calculateNoiseScale()
-        // console.log("scaleRate: ", agentDefaults.noiseScale)
+            // console.log("scaleRate: ", agentDefaults.noiseScale)
 
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
@@ -52,8 +61,7 @@ function HSB2HSL(h, s, b) {
         agents: 70000, //not used any more
         minAgents: 20000, // not used any more
         widthNoiseScaleRatio: 0.13,
-        verticalSizeAgentRatio: 0.11,
-        horizontalSizeAgentRatio: 0.26,
+        sizeAgentRatio: 0.04,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
@@ -101,14 +109,14 @@ function HSB2HSL(h, s, b) {
 
     function getData() {
         function reqListener() {
-            if (req.status=='404') {
+            if (req.status == '404') {
                 reqFailed()
                 return
             }
             var data = JSON.parse(req.responseText)
             settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
             settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
-    		settings.word = data.word
+            settings.word = data.word
             settings.dominantEmotionProportion = data.dominant[0][1]
             var action = started ? update : init
             action()
@@ -130,8 +138,9 @@ function HSB2HSL(h, s, b) {
 
         setTimeout(getData, settings.fetchPeriod * 1000)
     }
-    function calculateNoiseScale(){
-      return (resizedCanvas.width * resizedCanvas.height)*100/(600*342)  //setting the noiseScale based on surface area not on width (so that it can work on all screen ratios)
+
+    function calculateNoiseScale() {
+        return (resizedCanvas.width * resizedCanvas.height) * 100 / (600 * 342) //setting the noiseScale based on surface area not on width (so that it can work on all screen ratios)
     }
 
     function createColorMixer() {
@@ -142,43 +151,48 @@ function HSB2HSL(h, s, b) {
     }
 
     function update() {
-    	createColorMixer()
-    	updateOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
+        createColorMixer()
+        updateOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
     }
 
     function init() {
         started = true
-        addOverlay(settings.word, [ emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]] ])
+        addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
 
-        var supportsWebGL = (function(){
-            if(( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()){
-                var _canvas = document.createElement( 'canvas' );
-                var _gl = _canvas.getContext( 'webgl' ) || _canvas.getContext( 'experimental-webgl' );
+        var supportsWebGL = (function() {
+            if ((function() {
+                    try {
+                        return !!window.WebGLRenderingContext && !!document.createElement('canvas').getContext('experimental-webgl');
+                    } catch (e) {
+                        return false;
+                    }
+                })()) {
+                var _canvas = document.createElement('canvas');
+                var _gl = _canvas.getContext('webgl') || _canvas.getContext('experimental-webgl');
                 var errors;
-                try{
-                    _gl.clearStencil( 0 );
-                    errors=_gl.getError();
-                }catch(e){
+                try {
+                    _gl.clearStencil(0);
+                    errors = _gl.getError();
+                } catch (e) {
                     return false;
                 }
                 return errors === 0;
-            }else{
+            } else {
                 return false;
             }
         })()
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (!supportsWebGL || iOS) {
-          addFallbackImage(settings.emotions)
-          return
+            addFallbackImage(settings.emotions)
+            return
         }
 
         createColorMixer()
-        if (resizedCanvas.width>resizedCanvas.height) settings.agents = resizedCanvas.width * resizedCanvas.height * settings.horizontalSizeAgentRatio;
-        else settings.agents = resizedCanvas.width * resizedCanvas.height * settings.verticalSizeAgentRatio
-        // console.log(resizedCanvas.width, resizedCanvas.height, settings.sizeAgentRatio)
+        settings.agents = Math.max(30000, canvasSize.width * canvasSize.height * settings.sizeAgentRatio)
+            // console.log(resizedCanvas.width, resizedCanvas.height, settings.sizeAgentRatio)
         console.log(settings.agents)
 
-        camera = new THREE.OrthographicCamera( resizedCanvas.width / - 2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / - 2, 0.1, 10000 );
+        camera = new THREE.OrthographicCamera(resizedCanvas.width / -2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / -2, 0.1, 10000);
         // camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
         camera.position.set(0, 0, -450); //makes no diff if it's -450 or -45.
         scene = new THREE.Scene();
@@ -248,15 +262,15 @@ function HSB2HSL(h, s, b) {
         }
         resizedCanvas = {
             width: 600,
-            height: 600 / (canvasSize.width/canvasSize.height)
+            height: 600 / (canvasSize.width / canvasSize.height)
         }
 
         agentDefaults.noiseScale = calculateNoiseScale()
 
-        camera.left = resizedCanvas.width / - 2
+        camera.left = resizedCanvas.width / -2
         camera.right = resizedCanvas.width / 2
         camera.top = resizedCanvas.height / 2
-        camera.bottom = resizedCanvas.height / - 2
+        camera.bottom = resizedCanvas.height / -2
         camera.updateProjectionMatrix()
 
         renderer.setSize(canvasSize.width, canvasSize.height)
@@ -284,16 +298,16 @@ function HSB2HSL(h, s, b) {
     function buildGradients(colors) {
         var alpha = 0.75
         var dominantColor = HSB2HSL(colors[0][0], colors[0][1], colors[0][2])
-    	var subColor = HSB2HSL(colors[1][0], colors[1][1], colors[1][2])
+        var subColor = HSB2HSL(colors[1][0], colors[1][1], colors[1][2])
 
-    	var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2]*75 + '%, ' + alpha + ')'
-    	var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
-    	// var gradient = 'linear-gradient(70deg, '+ left + ' ' + (1-settings.dominantEmotionProportion)*100 +'%, '+ right + ')' // TODO: experimenting with making gradient proportionate
-        var gradient = 'linear-gradient(70deg, '+ left + ', '+ right + ')'
+        var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2] * 75 + '%, ' + alpha + ')'
+        var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
+            // var gradient = 'linear-gradient(70deg, '+ left + ' ' + (1-settings.dominantEmotionProportion)*100 +'%, '+ right + ')' // TODO: experimenting with making gradient proportionate
+        var gradient = 'linear-gradient(70deg, ' + left + ', ' + right + ')'
 
-    	left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
-    	right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2]*75 + '%,' + alpha + ')'
-    	var gradient2 = 'linear-gradient(45deg, ' + left + ','+ right +')'
+        left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
+        right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
+        var gradient2 = 'linear-gradient(45deg, ' + left + ',' + right + ')'
 
         return [gradient, gradient2]
     }
@@ -314,8 +328,8 @@ function HSB2HSL(h, s, b) {
     function addFallbackImage(emotions) {
         var background = document.createElement('div')
         emotions.sort(function(a, b) {
-            if (a<b) return -1
-            if (a>b) return 1
+            if (a < b) return -1
+            if (a > b) return 1
             return 0
         })
         background.style.backgroundImage = 'url(assets/fallback-images/' + emotions[0] + '-' + emotions[1] + '.jpg)'
@@ -324,7 +338,7 @@ function HSB2HSL(h, s, b) {
     }
 
     function addOverlay(emotion, colors) {
-    	if (!emotion) emotion = "splendid"
+        if (!emotion) emotion = "splendid"
 
         var overlay = document.createElement('div')
         overlay.className = 'swarm-overlay'
