@@ -18,6 +18,7 @@ function HSB2HSL(h, s, b) {
         }
 
         //calculating resizedCanvas based on screen orientation
+        //if you change the 600, make sure you change it also in the calc for noiseStep in the Palettes
         if (canvasSize.width > canvasSize.height) {
             resizedCanvas = {
                 width: 600,

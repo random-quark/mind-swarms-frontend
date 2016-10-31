@@ -14,7 +14,9 @@ function Palette(_width, _height, paletteScaleFactor, colorData, originalNoiseSe
     this.c = colorData[0] / 360
     this.hueRange = colorData[1]
     this.minMarbleBrightness = colorData[2]
-    this.noiseStep = 0.005*2 // doubled it for more variety
+    // console.log("palettes: ", _width, _height)
+    this.noiseStep = 600 / this.palWidth*0.01 // 600 because noiseStep 0.01 looked good at 600 width and then we adjust accordingly as canvas gets smaller.
+    // console.log("noiseStep: ", this.noiseStep)
     this.randomXoffset = Math.random()*1000
     this.randomYoffset = Math.random()*5000
     this.createMarble()
