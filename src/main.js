@@ -188,7 +188,7 @@ function HSB2HSL(h, s, b) {
         }
 
         createColorMixer()
-        settings.agents = Math.max(30000, canvasSize.width * canvasSize.height * settings.sizeAgentRatio)
+        settings.agents = Math.max(40000, canvasSize.width * canvasSize.height * settings.sizeAgentRatio)
             // console.log(resizedCanvas.width, resizedCanvas.height, settings.sizeAgentRatio)
         console.log(settings.agents)
 
