@@ -128,7 +128,8 @@ function HSB2HSL(h, s, b) {
             settings.emotions = ["joy", "love"]
             settings.word = "joyful"
             settings.dominantEmotionProportion = 0.5
-            init()
+            var action = started ? update : init
+            action()
         }
 
         var req = new XMLHttpRequest()
