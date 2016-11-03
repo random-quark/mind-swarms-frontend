@@ -43,11 +43,8 @@ function getQueryVariable(variable) {
                 height: 600
             }
         }
-        // console.log("container: ", container.offsetWidth, container.offsetHeight)
-        // console.log("resizedCanvas: ", resizedCanvas)
-
-        agentDefaults.noiseScale = calculateNoiseScale()
-            // console.log("scaleRate: ", agentDefaults.noiseScale)
+        if (settings.debug) console.log("container: ", container.offsetWidth, container.offsetHeight)
+        if (settings.debug) console.log("resizedCanvas: ", resizedCanvas)
 
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
@@ -75,7 +72,6 @@ function getQueryVariable(variable) {
         debug: false,
         agents: 70000, //not used any more
         minAgents: 40000,
-        widthNoiseScaleRatio: 0.13,
         sizeAgentRatio: 0.04,
         fadeAlpha: 0,
         noiseDet: 5,
@@ -92,9 +88,8 @@ function getQueryVariable(variable) {
     }
     settings.debug = getQueryVariable('debug')== "true" ? true : false;
 
-    console.log("VALUE: ", settings.debug)
     var agentDefaults = {
-        noiseScale: 150,
+        noiseScale: 100,
         randomSeed: 0,
         agentsAlpha: 20,
         strokeWidth: 2,
@@ -157,9 +152,11 @@ function getQueryVariable(variable) {
         setTimeout(getData, settings.fetchPeriod * 1000)
     }
 
-    function calculateNoiseScale() {
-        return (resizedCanvas.width * resizedCanvas.height) * 100 / (600 * 342) //setting the noiseScale based on surface area not on width (so that it can work on all screen ratios)
-    }
+    //not really needed once we discovered that the canvas is pretty much the same size 600 x something
+    // function calculateNoiseScale() {
+    //     if (resizedCanvas.width>=resizedCanvas.height) return 100;
+    //     else return resizedCanvas.width*100/600;
+    // }
 
     function createColorMixer() {
         colorMixer = new ColorMixer(resizedCanvas, settings.paletteScaleFactor, settings.customBlend, emotionsColors, settings.emotions, settings.blendFactor, settings.noiseSeed, settings.noiseDet)
@@ -206,9 +203,11 @@ function getQueryVariable(variable) {
         }
 
         createColorMixer()
+
         settings.agents = Math.max(settings.minAgents, canvasSize.width * canvasSize.height * settings.sizeAgentRatio)
-            // console.log(resizedCanvas.width, resizedCanvas.height, settings.sizeAgentRatio)
-        console.log(settings.agents)
+        if (settings.debug) console.log("Num of agents: ", settings.agents)
+
+        if (settings.debug) console.log("noiseScale: ", agentDefaults.noiseScale)
 
         camera = new THREE.OrthographicCamera(resizedCanvas.width / -2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / -2, 0.1, 10000);
         // camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
