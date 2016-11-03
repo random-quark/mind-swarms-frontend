@@ -72,7 +72,7 @@ function getQueryVariable(variable) {
         debug: false,
         agents: 70000, //not used any more
         minAgents: 40000,
-        sizeAgentRatio: 0.036,
+        sizeAgentRatio: 0.038,
         fadeAlpha: 0,
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
