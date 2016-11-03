@@ -13,7 +13,7 @@ function getQueryVariable(variable) {
       return pair[1];
     }
   }
-  return false
+  return null
   // alert('Query Variable ' + variable + ' not found');
 }
 
