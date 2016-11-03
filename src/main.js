@@ -4,6 +4,19 @@ function HSB2HSL(h, s, b) {
     return [h, s, l]
 }
 
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  return false
+  // alert('Query Variable ' + variable + ' not found');
+}
+
 (function(global) {
     var module = global.swarm = {}
 
@@ -59,6 +72,7 @@ function HSB2HSL(h, s, b) {
     }
 
     var settings = {
+        debug: false,
         agents: 70000, //not used any more
         minAgents: 40000,
         widthNoiseScaleRatio: 0.13,
@@ -76,7 +90,9 @@ function HSB2HSL(h, s, b) {
         dominantEmotionProportion: 0.5,
         fetchPeriod: 60
     }
+    settings.debug = getQueryVariable('debug')== "true" ? true : false;
 
+    console.log("VALUE: ", settings.debug)
     var agentDefaults = {
         noiseScale: 150,
         randomSeed: 0,
@@ -209,30 +225,31 @@ function HSB2HSL(h, s, b) {
         var line = new THREE.LineSegments(geometry, material);
         scene.add(line);
 
-        //debugging cubes: FIX ME - remove these cubes
-        var cubeGeometry = new THREE.BoxGeometry(14, 14, 14);
-        var cubeMaterial = new THREE.MeshLambertMaterial();
-        cubeMaterial.color = new THREE.Color(255, 0, 0);
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.x = resizedCanvas.width / -2
-        cube.position.y = resizedCanvas.height / -2
-        cube.position.z = 0
-        scene.add(cube);
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.x = resizedCanvas.width / 2
-        cube.position.y = resizedCanvas.height / -2
-        cube.position.z = 0
-        scene.add(cube);
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.x = resizedCanvas.width / 2
-        cube.position.y = resizedCanvas.height / 2
-        cube.position.z = 0
-        scene.add(cube);
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.x = resizedCanvas.width / -2
-        cube.position.y = resizedCanvas.height / 2
-        cube.position.z = 0
-        scene.add(cube);
+        if (settings.debug===true) {
+          var cubeGeometry = new THREE.BoxGeometry(14, 14, 14);
+          var cubeMaterial = new THREE.MeshLambertMaterial();
+          cubeMaterial.color = new THREE.Color(255, 0, 0);
+          var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+          cube.position.x = resizedCanvas.width / -2
+          cube.position.y = resizedCanvas.height / -2
+          cube.position.z = 0
+          scene.add(cube);
+          var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+          cube.position.x = resizedCanvas.width / 2
+          cube.position.y = resizedCanvas.height / -2
+          cube.position.z = 0
+          scene.add(cube);
+          var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+          cube.position.x = resizedCanvas.width / 2
+          cube.position.y = resizedCanvas.height / 2
+          cube.position.z = 0
+          scene.add(cube);
+          var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+          cube.position.x = resizedCanvas.width / -2
+          cube.position.y = resizedCanvas.height / 2
+          cube.position.z = 0
+          scene.add(cube);
+      }
 
 
         renderer = new THREE.WebGLRenderer({
@@ -250,35 +267,16 @@ function HSB2HSL(h, s, b) {
 
         settings.container.appendChild(renderer.domElement);
 
-        if (window.debug) stats.showPanel(1)
-        if (window.debug) document.body.appendChild(stats.dom)
+        if (settings.debug === true) {
+            if (window.debug) stats.showPanel(1)
+            if (window.debug) document.body.appendChild(stats.dom)
+        }
 
         myDraw()
     }
 
     function onResize() {
-
-        canvasSize = {
-            width: settings.container.offsetWidth,
-            height: settings.container.offsetHeight
-        }
-        resizedCanvas = {
-            width: 600,
-            height: 600 / (canvasSize.width / canvasSize.height)
-        }
-
-        agentDefaults.noiseScale = calculateNoiseScale()
-
-        camera.left = resizedCanvas.width / -2
-        camera.right = resizedCanvas.width / 2
-        camera.top = resizedCanvas.height / 2
-        camera.bottom = resizedCanvas.height / -2
-        camera.updateProjectionMatrix()
-
-        renderer.setSize(canvasSize.width, canvasSize.height)
-        var overlay = document.getElementsByClassName('swarm-overlay')[0]
-        overlay.style.width = canvasSize.width + 'px'
-        overlay.style.height = canvasSize.height + 'px'
+      location.reload()
     }
 
     global.addEventListener('resize', onResize)
