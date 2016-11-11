@@ -70,6 +70,7 @@ function getQueryVariable(variable) {
 
     var settings = {
         debug: false,
+        manualColor: false,
         agents: 70000, //not used any more
         minAgents: 40000,
         sizeAgentRatio: 0.038,
@@ -84,7 +85,8 @@ function getQueryVariable(variable) {
         debug: false,
         emotions: ['joy', 'anger'],
         dominantEmotionProportion: 0.5,
-        fetchPeriod: 60
+        fetchPeriod: 60,
+        showOverlay: true
     }
     settings.debug = getQueryVariable('debug')== "true" ? true : false;
 
@@ -121,7 +123,7 @@ function getQueryVariable(variable) {
 
     function getData() {
         function reqListener() {
-            if (req.status == '404') {
+            if (req.status == '404' || settings.manualColor) {
                 reqFailed()
                 return
             }
@@ -172,7 +174,7 @@ function getQueryVariable(variable) {
 
     function init() {
         started = true
-        addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
+        if (settings.showOverlay) addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
 
         var supportsWebGL = (function() {
             if ((function() {
