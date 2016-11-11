@@ -70,6 +70,7 @@ function getQueryVariable(variable) {
 
     var settings = {
         debug: false,
+        manualColors: false,
         agents: 70000, //not used any more
         minAgents: 40000,
         sizeAgentRatio: 0.036,
@@ -77,14 +78,15 @@ function getQueryVariable(variable) {
         noiseDet: 5,
         noiseSeed: Math.random() * 10000,
         overlayAlpha: 0,
-        blendFactor: 0.2,
+        blendFactor: 0.5,
         paletteScaleFactor: 1,
         customBlend: true,
         imageChoice: 0,
         debug: false,
-        emotions: ['joy', 'anger'],
-        dominantEmotionProportion: 0.5,
-        fetchPeriod: 60
+        emotions: ['fear', 'sadness'],
+        word: "joyful",
+        fetchPeriod: 60,
+        showOverlay: true
     }
     settings.debug = getQueryVariable('debug')== "true" ? true : false;
 
@@ -121,7 +123,7 @@ function getQueryVariable(variable) {
 
     function getData() {
         function reqListener() {
-            if (req.status == '404') {
+            if (req.status == '404' || settings.manualColors) {
                 reqFailed()
                 return
             }
@@ -136,9 +138,9 @@ function getQueryVariable(variable) {
 
         function reqFailed() {
             console.error("Swarm: failed to connect to sentiment service, loading default emotions")
-            settings.emotions = ["joy", "love"]
-            settings.word = "joyful"
-            settings.dominantEmotionProportion = 0.5
+            //settings.emotions = ["joy", "love"]
+            //settings.word = "joyful"
+            // settings.dominantEmotionProportion = 0.5
             var action = started ? update : init
             action()
         }
@@ -172,7 +174,7 @@ function getQueryVariable(variable) {
 
     function init() {
         started = true
-        addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
+        if (settings.showOverlay) addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
 
         var supportsWebGL = (function() {
             if ((function() {
