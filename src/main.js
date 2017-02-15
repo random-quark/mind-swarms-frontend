@@ -14,7 +14,6 @@ function getQueryVariable(variable) {
     }
   }
   return null
-  // alert('Query Variable ' + variable + ' not found');
 }
 
 (function(global) {
@@ -24,6 +23,9 @@ function getQueryVariable(variable) {
 
     module.create = function(containerClassName, _basePath) {
         var container = document.getElementsByClassName(containerClassName)[0]
+
+        setupContainer(container)
+
         settings.container = container
         canvasSize = {
             width: container.offsetWidth,
@@ -49,6 +51,8 @@ function getQueryVariable(variable) {
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
+
+        startTimer()
     }
 
     module.resize = function() {
@@ -113,6 +117,28 @@ function getQueryVariable(variable) {
         love: [0, 0.1, 0.8] // RED
     }
 
+    var emotionsNames = {
+      anger: 'Anger',
+      joy: 'Joy',
+      calm: 'Calm',
+      disgust: 'Aversion',
+      sadness: 'Sadness',
+      fear: 'Fear',
+      surprise: 'Surprise',
+      love: 'Love'
+    }
+
+    var emotionsLogos = {
+      anger: 'logo2.png',
+      joy: 'logo1.png',
+      calm: 'logo1.png',
+      disgust: 'logo6.png',
+      sadness: 'logo6.png',
+      fear: 'logo5.png',
+      surprise: 'logo4.png',
+      love: 'logo3.png'
+    }
+
     if (window.debug) var stats = new Stats()
     var agents = []
     var colorMixer
@@ -120,6 +146,23 @@ function getQueryVariable(variable) {
     geometry = new THREE.Geometry()
 
     var started = false
+
+    function setupContainer(container) {
+        container.innerHTML = '<div class="swarm-metadata"><span class="swarm-time">--:--</span><span> / </span>' +
+        '<span class="swarm-date">--.--.--</span><span> /</span><span class="live"> LIVE EmoScape:</span>' +
+        '<span class="emotion-box a">Surprise</span><span class="emotion-box b">Love</span><span class="emotion-box c">Anger</span></div>'
+    }
+
+    function startTimer() {
+      var date = new Date()
+      var dateString = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear().toString().substring(2)
+      document.getElementsByClassName('swarm-date')[0].innerHTML = dateString
+
+      var timeString = date.getHours() + ':' + date.getMinutes()
+      document.getElementsByClassName('swarm-time')[0].innerHTML = timeString
+
+      setTimeout(startTimer, 1000)
+    }
 
     function getData() {
         function reqListener() {
@@ -130,10 +173,11 @@ function getQueryVariable(variable) {
             var data = JSON.parse(req.responseText)
             settings.emotions = [data.dominant[0][0], data.dominant[1][0]]
             settings.blendFactor = data.dominant[1][1] / data.dominant[0][1]
+            settings.top = data.top
             settings.word = data.word
             settings.dominantEmotionProportion = data.dominant[0][1]
-            var action = started ? update : init
-            action()
+            var performAction = started ? update : init
+            performAction()
         }
 
         function reqFailed() {
@@ -141,8 +185,8 @@ function getQueryVariable(variable) {
             settings.emotions = ["joy", "love"]
             settings.word = "joyful"
             settings.dominantEmotionProportion = 0.5
-            var action = started ? update : init
-            action()
+            var performAction = started ? update : init
+            performAction()
         }
 
         var req = new XMLHttpRequest()
@@ -169,12 +213,12 @@ function getQueryVariable(variable) {
 
     function update() {
         createColorMixer()
-        updateOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
+        updateOverlay(settings.top)
     }
 
     function init() {
         started = true
-        if (settings.showOverlay) addOverlay(settings.word, [emotionsColors[settings.emotions[0]], emotionsColors[settings.emotions[1]]])
+        if (settings.showOverlay) addOverlay(settings.top)
 
         var supportsWebGL = (function() {
             if ((function() {
@@ -296,36 +340,6 @@ function getQueryVariable(variable) {
         requestAnimationFrame(myDraw)
     }
 
-    function buildGradients(colors) {
-        var alpha = 0.75
-        var dominantColor = HSB2HSL(colors[0][0], colors[0][1], colors[0][2])
-        var subColor = HSB2HSL(colors[1][0], colors[1][1], colors[1][2])
-
-        var left = 'hsla(' + subColor[0] + ',' + 100 + '%,' + subColor[2] * 75 + '%, ' + alpha + ')'
-        var right = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
-            // var gradient = 'linear-gradient(70deg, '+ left + ' ' + (1-settings.dominantEmotionProportion)*100 +'%, '+ right + ')' // TODO: experimenting with making gradient proportionate
-        var gradient = 'linear-gradient(70deg, ' + left + ', ' + right + ')'
-
-        left = 'hsla(' + dominantColor[0] + ',' + 100 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
-        right = 'hsla(' + dominantColor[0] + ',' + 75 + '%,' + dominantColor[2] * 75 + '%,' + alpha + ')'
-        var gradient2 = 'linear-gradient(45deg, ' + left + ',' + right + ')'
-
-        return [gradient, gradient2]
-    }
-
-    function updateOverlay(emotion, colors) {
-        var logo = document.getElementById('swarm-logo')
-        var textA = document.getElementById('swarm-text')
-        var textB = document.getElementById('swarm-emotion-word')
-
-        var gradients = buildGradients(colors)
-
-        logo.style.backgroundImage = gradients[0]
-        textA.style.backgroundImage = gradients[0]
-        textB.innerHTML = emotion
-        textB.style.backgroundImage = gradients[1]
-    }
-
     function addFallbackImage(emotions) {
         var background = document.createElement('div')
         emotions.sort(function(a, b) {
@@ -338,8 +352,10 @@ function getQueryVariable(variable) {
         settings.container.appendChild(background)
     }
 
-    function addOverlay(emotion, colors) {
-        if (!emotion) emotion = "splendid"
+    function addOverlay(emotions) {
+        if (!emotions) emotions = ["joy","love","surprise"]
+
+        setEmotions(emotions)
 
         var overlay = document.createElement('div')
         overlay.className = 'swarm-overlay'
@@ -347,30 +363,33 @@ function getQueryVariable(variable) {
         logo.className = 'logo'
         var text = document.createElement('div')
         text.className = 'text'
-        logo.innerHTML = '<img src="assets/ssw-logo.png">'
-        var textA = document.createElement('span')
-        var textB = document.createElement('span')
-        textA.appendChild(document.createTextNode('Today the world is feeling'))
-        textB.appendChild(document.createTextNode(emotion))
-        text.appendChild(textA)
-        text.appendChild(textB)
-
-        var gradients = buildGradients(colors)
-
-        logo.style.backgroundImage = gradients[0]
-        textA.style.backgroundImage = gradients[0]
-        textB.style.backgroundImage = gradients[1]
+        logo.innerHTML = '<img src="assets/' + emotionsLogos[emotions[0]] + '">'
 
         logo.id = "swarm-logo"
-        textA.id = "swarm-text"
-        textB.id = "swarm-emotion-word"
 
         overlay.appendChild(logo)
-        overlay.appendChild(text)
 
         overlay.style.width = canvasSize.width + 'px'
         overlay.style.height = canvasSize.height + 'px'
 
         settings.container.appendChild(overlay)
+    }
+
+    function setEmotions(emotions) {
+      document.getElementsByClassName('a')[0].innerHTML = emotionsNames[emotions[0]]
+      document.getElementsByClassName('b')[0].innerHTML = emotionsNames[emotions[1]]
+      document.getElementsByClassName('c')[0].innerHTML = emotionsNames[emotions[2]]
+
+      document.getElementsByClassName('a')[0].className = ("emotion-box a " + emotions[0])
+      document.getElementsByClassName('b')[0].className = ("emotion-box b " + emotions[1])
+      document.getElementsByClassName('c')[0].className = ("emotion-box c " + emotions[2])
+    }
+
+    function updateOverlay(emotions) {
+        if (!emotions) emotions = ["joy","love","anger"]
+        setEmotions(emotions)
+
+        var logo = document.getElementById('swarm-logo')
+        logo.innerHTML = '<img src="assets/' + emotionsLogos[emotions[0]] + '">'
     }
 })(window);

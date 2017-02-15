@@ -1,5 +1,4 @@
 .swarm-overlay {
-  font-family: 'Roboto', sans-serif;
   color: #fff;
   position: absolute;
   display: flex;
@@ -8,6 +7,67 @@
   height: 100%;
   justify-content: center;
   flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+}
+
+.swarm-metadata {
+    font-family: 'Roboto', sans-serif;
+    color: #808080;
+    font-size: 14px;
+}
+
+.swarm-metadata span {
+  padding: 3px 3px;
+}
+.swarm-metadata span.swarm-time {
+  font-weight: bold;
+}
+.swarm-metadata span:first-of-type {
+  padding-left: 0px;
+}
+.swarm-metadata span.live {
+  padding-right: 6px;
+}
+
+.swarm-metadata .emotion-box {
+  color: #fff;
+  padding: 3px 0px;
+  width: 85px;
+  text-align: center;
+}
+
+.swarm-metadata {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  display: flex;
+}
+.swarm-metadata .emotion-box {
+  display: inline;
+}
+
+
+.swarm-metadata .love {
+  background-color: #f0575d;
+}
+.swarm-metadata .surprise {
+  background-color: #733e98;
+}
+.swarm-metadata .joy {
+  background-color: #feee54;
+}
+.swarm-metadata .disgust {
+  background-color: #7bc3ad;
+}
+.swarm-metadata .sadness {
+  background-color: #75c7d7;
+}
+.swarm-metadata .fear {
+  background-color: #3b77b0;
+}
+.swarm-metadata .anger {
+  background-color: #f1946c;
 }
 
 .swarm-container {
@@ -21,13 +81,10 @@
 }
 
 .swarm-overlay .logo {
-  margin-bottom: 100px;
-  padding: 30px;
   text-align: center;
   font-size: 25px;
-  width: 261px;
+  width: 28%;
   max-width: 60%;
-  height: 120px;
 }
 
 @media (max-width: 968px) {
