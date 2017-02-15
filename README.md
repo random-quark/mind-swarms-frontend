@@ -6,17 +6,21 @@ For further help please contact hello@randomquark.com
 
 To add to a page, include `three.min.js`, `build/swarm.js`, `style.css` files on your page. To include on the page:
 
-*Note:* if you update any of the source files run `./build.sh` on the command line.
+*Note:* if you update any of the source files run `./build.sh` on the command line. You will need to install uglify-js with this command: `npm install -g uglify-js`.
 
 ```
 <div class="swarm-container"></div>
 ```
 
 ```
-swarm.create('swarm-container', 'http://server.com/api-root'); // element class, API basePath without trailing slash
+swarm.create('swarm-container', 'http://server.com/api-root'); // element class, API basePath without trailing slash, add the url of the API wherever you set this up
 ```
 
-The visualisation will render itself into the element and make a call to the basepath + `/sentiment` to fetch data.
+The visualisation will render itself into the element and make a call to the basepath + `/sentiment` to fetch data. You will need the following files on the page to run successfully:
+
+lib/stats.min.js
+lib/three.min.js
+build/swarm.js
 
 The responsive design looking correct depends on this meta tag being present in the `<head>`:
 
