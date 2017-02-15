@@ -1,3 +1,7 @@
+.swarm-container {
+  position: relative;
+}
+
 .swarm-overlay {
   color: #fff;
   position: absolute;
