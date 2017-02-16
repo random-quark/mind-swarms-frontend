@@ -153,12 +153,17 @@ function getQueryVariable(variable) {
         '<span class="emotion-box a">Surprise</span><span class="emotion-box b">Love</span><span class="emotion-box c">Anger</span></div>'
     }
 
+    function padLeftZero(input) {
+      if (input.toString().length < 2) return "0" + input
+      return input
+    }
+
     function startTimer() {
-      var date = new Date()
+      var date = new Date("2015-03-25T10:11:00Z")
       var dateString = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear().toString().substring(2)
       document.getElementsByClassName('swarm-date')[0].innerHTML = dateString
 
-      var timeString = date.getHours() + ':' + date.getMinutes()
+      var timeString = padLeftZero(date.getHours()) + ':' + padLeftZero(date.getMinutes())
       document.getElementsByClassName('swarm-time')[0].innerHTML = timeString
 
       setTimeout(startTimer, 1000)
