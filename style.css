@@ -5,6 +5,7 @@
 .swarm-overlay {
   color: #fff;
   position: absolute;
+  top: 0;
   display: flex;
   align-items: center;
   width: 100%;
@@ -18,6 +19,10 @@
     font-family: 'Roboto', sans-serif;
     color: #808080;
     font-size: 14px;
+}
+
+.swarm-metadata .emotions, .swarm-metadata .data {
+  display: flex;
 }
 
 .swarm-metadata span {
@@ -38,6 +43,7 @@
   padding: 3px 0px;
   width: 85px;
   text-align: center;
+  transition: background-color 2s ease;
 }
 
 .swarm-metadata {
@@ -51,6 +57,11 @@
   display: inline;
 }
 
+.swarm-metadata .super {
+  position: relative;
+  font-size: 65%;
+  top: -0.5em;
+}
 
 .swarm-metadata .love {
   background-color: #f0575d;
@@ -87,13 +98,47 @@
 .swarm-overlay .logo {
   text-align: center;
   font-size: 25px;
-  width: 28%;
+  width: 22.4%;
   max-width: 60%;
+
+  position: absolute;
+
+  animation: fadein 2s;
+}
+
+.swarm-container .fadein {
+  animation: fadein 2s;
+  opacity: 1;
+}
+
+.swarm-container .fadeout {
+  animation: fadeout 2s;
+  opacity: 0;
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @media (max-width: 968px) {
   .swarm-overlay .logo {
     height: auto;
+    width: 280px;
+  }
+
+  .swarm-metadata {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .swarm-metadata .emotion-box {
+    flex-grow: 1;
   }
 }
 

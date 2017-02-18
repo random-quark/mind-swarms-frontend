@@ -25,6 +25,7 @@ function getQueryVariable(variable) {
         var container = document.getElementsByClassName(containerClassName)[0]
 
         setupContainer(container)
+        startTimer()
 
         settings.container = container
         canvasSize = {
@@ -51,8 +52,6 @@ function getQueryVariable(variable) {
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
         getData()
-
-        startTimer()
     }
 
     module.resize = function() {
@@ -65,6 +64,7 @@ function getQueryVariable(variable) {
     module.testNewColor = function() {
         settings.emotions = ["anger", "surprise"]
         settings.word = "alarmed"
+        settings.top = ["joy", "disgust", "anger"]
         update()
     }
 
@@ -147,28 +147,6 @@ function getQueryVariable(variable) {
 
     var started = false
 
-    function setupContainer(container) {
-        container.innerHTML = '<div class="swarm-metadata"><span class="swarm-time">--:--</span><span> / </span>' +
-        '<span class="swarm-date">--.--.--</span><span> /</span><span class="live"> LIVE EmoScape:</span>' +
-        '<span class="emotion-box a">Surprise</span><span class="emotion-box b">Love</span><span class="emotion-box c">Anger</span></div>'
-    }
-
-    function padLeftZero(input) {
-      if (input.toString().length < 2) return "0" + input
-      return input
-    }
-
-    function startTimer() {
-      var date = new Date("2015-03-25T10:11:00Z")
-      var dateString = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear().toString().substring(2)
-      document.getElementsByClassName('swarm-date')[0].innerHTML = dateString
-
-      var timeString = padLeftZero(date.getHours()) + ':' + padLeftZero(date.getMinutes())
-      document.getElementsByClassName('swarm-time')[0].innerHTML = timeString
-
-      setTimeout(startTimer, 1000)
-    }
-
     function getData() {
         function reqListener() {
             if (req.status == '404' || settings.manualColor) {
@@ -189,6 +167,7 @@ function getQueryVariable(variable) {
             console.error("Swarm: failed to connect to sentiment service, loading default emotions")
             settings.emotions = ["joy", "love"]
             settings.word = "joyful"
+            settings.top = ["joy","love","surprise"]
             settings.dominantEmotionProportion = 0.5
             var performAction = started ? update : init
             performAction()
@@ -218,12 +197,14 @@ function getQueryVariable(variable) {
 
     function update() {
         createColorMixer()
-        updateOverlay(settings.top)
+        updateOverlay()
     }
 
     function init() {
         started = true
-        if (settings.showOverlay) addOverlay(settings.top)
+        if (settings.showOverlay) {
+          addOverlay()
+        }
 
         var supportsWebGL = (function() {
             if ((function() {
@@ -357,44 +338,76 @@ function getQueryVariable(variable) {
         settings.container.appendChild(background)
     }
 
-    function addOverlay(emotions) {
-        if (!emotions) emotions = ["joy","love","surprise"]
+    /* swarm metadata + logo */
 
-        setEmotions(emotions)
-
-        var overlay = document.createElement('div')
-        overlay.className = 'swarm-overlay'
-        var logo = document.createElement('div')
-        logo.className = 'logo'
-        var text = document.createElement('div')
-        text.className = 'text'
-        logo.innerHTML = '<img src="assets/' + emotionsLogos[emotions[0]] + '">'
-
-        logo.id = "swarm-logo"
-
-        overlay.appendChild(logo)
-
-        overlay.style.width = canvasSize.width + 'px'
-        overlay.style.height = canvasSize.height + 'px'
-
-        settings.container.appendChild(overlay)
+    function setupContainer(container) {
+        container.innerHTML = '<div class="swarm-metadata"><div class="data"><span class="swarm-time">--:--</span><span> / </span>' +
+        '<span class="swarm-date">--.--.--</span><span> /</span><span class="live"> LIVE EmoScape<span class="super">TM</span>:</span>' +
+        '</div><div class="emotions"><span class="emotion-box a">Surprise</span><span class="emotion-box b">Love</span><span class="emotion-box c">Anger</span></div></div>'
     }
 
-    function setEmotions(emotions) {
-      document.getElementsByClassName('a')[0].innerHTML = emotionsNames[emotions[0]]
-      document.getElementsByClassName('b')[0].innerHTML = emotionsNames[emotions[1]]
-      document.getElementsByClassName('c')[0].innerHTML = emotionsNames[emotions[2]]
+    function addOverlay() {
+      setMetadata()
 
-      document.getElementsByClassName('a')[0].className = ("emotion-box a " + emotions[0])
-      document.getElementsByClassName('b')[0].className = ("emotion-box b " + emotions[1])
-      document.getElementsByClassName('c')[0].className = ("emotion-box c " + emotions[2])
+      createOverlayElement()
+
+      setTimeout(function() {
+        addLogo()
+      }, 500)
     }
 
     function updateOverlay(emotions) {
-        if (!emotions) emotions = ["joy","love","anger"]
-        setEmotions(emotions)
+        setMetadata()
 
-        var logo = document.getElementById('swarm-logo')
-        logo.innerHTML = '<img src="assets/' + emotionsLogos[emotions[0]] + '">'
+        var logo = document.getElementsByClassName('swarm-logo')
+        console.log(logo)
+        logo[logo.length - 1].className += " fadeout"
+        addLogo(settings.top)
+    }
+
+    function padLeftZero(input) {
+      if (input.toString().length < 2) return "0" + input
+      return input
+    }
+
+    function startTimer() {
+      var date = new Date()
+      var dateString = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear().toString().substring(2)
+      document.getElementsByClassName('swarm-date')[0].innerHTML = dateString
+
+      var timeString = padLeftZero(date.getHours()) + ':' + padLeftZero(date.getMinutes())
+      document.getElementsByClassName('swarm-time')[0].innerHTML = timeString
+
+      setTimeout(startTimer, 1000)
+    }
+
+    function createOverlayElement() {
+      var overlay = document.createElement('div')
+      overlay.style.width = canvasSize.width + 'px'
+      overlay.style.height = canvasSize.height + 'px'
+      overlay.className = 'swarm-overlay'
+      settings.container.appendChild(overlay)
+    }
+
+    function addLogo(emotions) {
+      var logo = document.createElement('div')
+      logo.className = 'logo swarm-logo'
+      var text = document.createElement('div')
+      text.className = 'text'
+      console.log('assets/' + emotionsLogos[settings.top[0]])
+      logo.innerHTML = '<img src="assets/' + emotionsLogos[settings.top[0]] + '">'
+      logo.id = "swarm-logo"
+
+      document.getElementsByClassName('swarm-overlay')[0].appendChild(logo)
+    }
+
+    function setMetadata() {
+      document.getElementsByClassName('a')[0].innerHTML = '<span class="emotion-word fadein">' + emotionsNames[settings.top[0]] + '</span>'
+      document.getElementsByClassName('b')[0].innerHTML = '<span class="emotion-word fadein">' + emotionsNames[settings.top[1]] + '</span>'
+      document.getElementsByClassName('c')[0].innerHTML = '<span class="emotion-word fadein">' + emotionsNames[settings.top[2]] + '</span>'
+
+      document.getElementsByClassName('a')[0].className = ("emotion-box a " + settings.top[0])
+      document.getElementsByClassName('b')[0].className = ("emotion-box b " + settings.top[1])
+      document.getElementsByClassName('c')[0].className = ("emotion-box c " + settings.top[2])
     }
 })(window);
