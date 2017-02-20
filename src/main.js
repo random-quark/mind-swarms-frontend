@@ -46,8 +46,6 @@ function getQueryVariable(variable) {
                 height: 600
             }
         }
-        if (settings.debug) console.log("container: ", container.offsetWidth, container.offsetHeight)
-        if (settings.debug) console.log("resizedCanvas: ", resizedCanvas)
 
         settings.originalSize = Object.create(canvasSize)
         basePath = _basePath
@@ -237,9 +235,7 @@ function getQueryVariable(variable) {
         createColorMixer()
 
         settings.agents = Math.max(settings.minAgents, canvasSize.width * canvasSize.height * settings.sizeAgentRatio)
-        if (settings.debug) console.log("Num of agents: ", settings.agents)
 
-        if (settings.debug) console.log("noiseScale: ", agentDefaults.noiseScale)
 
         camera = new THREE.OrthographicCamera(resizedCanvas.width / -2, resizedCanvas.width / 2, resizedCanvas.height / 2, resizedCanvas.height / -2, 0.1, 10000);
         // camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 1000);
@@ -360,7 +356,6 @@ function getQueryVariable(variable) {
         setMetadata()
 
         var logo = document.getElementsByClassName('swarm-logo')
-        console.log(logo)
         logo[logo.length - 1].className += " fadeout"
         addLogo(settings.top)
     }
@@ -394,7 +389,6 @@ function getQueryVariable(variable) {
       logo.className = 'logo swarm-logo'
       var text = document.createElement('div')
       text.className = 'text'
-      console.log('assets/' + emotionsLogos[settings.top[0]])
       logo.innerHTML = '<img src="assets/' + emotionsLogos[settings.top[0]] + '">'
       logo.id = "swarm-logo"
 
