@@ -2,18 +2,6 @@
   position: relative;
 }
 
-.swarm-overlay {
-  color: #fff;
-  position: absolute;
-  top: 0;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  font-family: 'Roboto', sans-serif;
-}
-
 .swarm-metadata {
     font-family: 'Roboto', sans-serif;
     color: #808080;
@@ -94,14 +82,6 @@
   background-size: cover;
 }
 
-.swarm-overlay .logo {
-  text-align: center;
-  font-size: 25px;
-  width: 22.4%;
-  position: absolute;
-  animation: fadein 2s;
-}
-
 .swarm-container .fadein {
   animation: fadein 2s;
   opacity: 1;
@@ -123,11 +103,6 @@
 }
 
 @media (max-width: 968px) {
-  .swarm-overlay .logo {
-    height: auto;
-    width: 280px;
-  }
-
   .swarm-metadata {
     flex-direction: column;
     width: 100%;
@@ -138,21 +113,42 @@
   }
 }
 
+/* overlay */
+
+.swarm-overlay {
+  position: absolute;
+/*
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;*/
+}
+
+.swarm-overlay .logo {
+  top: 0; left: 0; bottom: 0; right: 0;
+  position: absolute;
+  margin: auto;
+  margin-top: 0;
+
+  height: 22.4%;
+  width: 22.4%;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  animation: fadein 2s;
+}
+
 .swarm-overlay .logo img {
   width: 100%;
 }
 
-.swarm-overlay .text {
-  max-width: 90%;
-  text-align: center;
-}
-
-.swarm-overlay .text span {
-  text-transform: uppercase;
-  font-size: 20px;
-  padding: 6px;
-  margin-right: 10px;
-  margin-bottom: 30px;
-  /*text-align: center;*/
-  display: inline-block;
+@media (max-width: 968px) {
+  .swarm-overlay .logo {
+    width: 280px;
+  }
 }
