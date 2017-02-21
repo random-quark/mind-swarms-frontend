@@ -389,7 +389,7 @@ function getQueryVariable(variable) {
       logo.className = 'logo swarm-logo'
       var text = document.createElement('div')
       text.className = 'text'
-      logo.innerHTML = '<img src="assets/' + emotionsLogos[settings.top[0]] + '">'
+      logo.innerHTML = '<img src="assets/white/' + emotionsLogos[settings.top[0]] + '">'
       logo.id = "swarm-logo"
 
       document.getElementsByClassName('swarm-overlay')[0].appendChild(logo)
