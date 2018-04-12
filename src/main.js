@@ -312,7 +312,7 @@ function getQueryVariable(variable) {
 
     renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true,
-      // antialias: true, // FIXME: turned off because it breaks preserveDrawingBuffer in iOS
+      antialias: true, // FIXME: turned off because it breaks preserveDrawingBuffer in iOS
       alpha: true
     });
     renderer.setClearColor(0xffffff, 0);
