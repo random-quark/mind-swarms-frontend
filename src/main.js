@@ -1,6 +1,6 @@
 function HSB2HSL(h, s, b) {
-  var l = (2 - s) * b / 2;
-  s = l && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : s;
+  var l = ((2 - s) * b) / 2;
+  s = l && l < 1 ? (s * b) / (l < 0.5 ? l * 2 : 2 - l * 2) : s;
   return [h, s, l];
 }
 
@@ -16,12 +16,12 @@ function getQueryVariable(variable) {
   return null;
 }
 
-(function(global) {
+(function (global) {
   var module = (global.swarm = {});
 
   var basePath, canvasSize, resizedCanvas;
 
-  module.create = function(containerClassName, _basePath) {
+  module.create = function (containerClassName, _basePath) {
     var container = document.getElementsByClassName(containerClassName)[0];
 
     setupContainer(container);
@@ -30,7 +30,7 @@ function getQueryVariable(variable) {
     settings.container = container;
     canvasSize = {
       width: container.offsetWidth,
-      height: container.offsetHeight
+      height: container.offsetHeight,
     };
 
     //calculating resizedCanvas based on screen orientation
@@ -38,12 +38,12 @@ function getQueryVariable(variable) {
     if (canvasSize.width > canvasSize.height) {
       resizedCanvas = {
         width: 600,
-        height: 600 / (container.offsetWidth / container.offsetHeight)
+        height: 600 / (container.offsetWidth / container.offsetHeight),
       };
     } else {
       resizedCanvas = {
         width: 600 / (container.offsetHeight / container.offsetWidth),
-        height: 600
+        height: 600,
       };
     }
 
@@ -52,14 +52,14 @@ function getQueryVariable(variable) {
     getData();
   };
 
-  module.resize = function() {
+  module.resize = function () {
     canvasSize = {
       width: settings.container.offsetWidth,
-      height: settings.container.offsetHeight
+      height: settings.container.offsetHeight,
     };
   };
 
-  module.testNewColor = function() {
+  module.testNewColor = function () {
     settings.emotions = ["anger", "surprise"];
     settings.word = "alarmed";
     settings.top = ["joy", "disgust", "anger"];
@@ -67,7 +67,7 @@ function getQueryVariable(variable) {
   };
 
   var limits = {
-    range: 50
+    range: 50,
   };
 
   var settings = {
@@ -88,7 +88,7 @@ function getQueryVariable(variable) {
     emotions: ["joy", "anger"],
     dominantEmotionProportion: 0.5,
     fetchPeriod: 60,
-    showOverlay: true
+    showOverlay: true,
   };
   settings.debug = getQueryVariable("debug") == "true" ? true : false;
 
@@ -101,7 +101,7 @@ function getQueryVariable(variable) {
     speed: 3,
     interAgentNoiseZRange: 0, // TODO: FIND CORRECT VALUE
     noiseZStep: 0.001,
-    randomInitialDirection: 0 // TODO: should this randomized here?
+    randomInitialDirection: 0, // TODO: should this randomized here?
   };
 
   var emotionsColors = {
@@ -112,7 +112,7 @@ function getQueryVariable(variable) {
     sadness: [190, 0.1, 0.8], // LIGHT BLUE
     fear: [210, 0.1, 0.8], // BLUE
     surprise: [285, 0.1, 0.65], // PURPLE
-    love: [0, 0.1, 0.8] // RED
+    love: [0, 0.1, 0.8], // RED
   };
 
   var emotionsNames = {
@@ -123,7 +123,7 @@ function getQueryVariable(variable) {
     sadness: "Sadness",
     fear: "Fear",
     surprise: "Surprise",
-    love: "Love"
+    love: "Love",
   };
 
   var emotionsLogos = {
@@ -134,7 +134,7 @@ function getQueryVariable(variable) {
     sadness: "logo6.png",
     fear: "logo5.png",
     surprise: "logo4.png",
-    love: "logo3.png"
+    love: "logo3.png",
   };
 
   if (window.debug) var stats = new Stats();
@@ -212,12 +212,12 @@ function getQueryVariable(variable) {
   function init() {
     started = true;
     if (settings.showOverlay) {
-      addOverlay();
+      // addOverlay();
     }
 
-    var supportsWebGL = (function() {
+    var supportsWebGL = (function () {
       if (
-        (function() {
+        (function () {
           try {
             return (
               !!window.WebGLRenderingContext &&
@@ -274,7 +274,7 @@ function getQueryVariable(variable) {
       vertexColors: THREE.VertexColors,
       opacity: 0.1,
       transparent: true,
-      linewidth: 1
+      linewidth: 1,
     });
 
     for (var i = 0; i < settings.agents; i++)
@@ -313,7 +313,7 @@ function getQueryVariable(variable) {
     renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true,
       antialias: true, // FIXME: turned off because it breaks preserveDrawingBuffer in iOS
-      alpha: true
+      alpha: true,
     });
     renderer.setClearColor(0xffffff, 0);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -355,7 +355,7 @@ function getQueryVariable(variable) {
 
   function addFallbackImage(emotions) {
     var background = document.createElement("div");
-    emotions.sort(function(a, b) {
+    emotions.sort(function (a, b) {
       if (a < b) return -1;
       if (a > b) return 1;
       return 0;
@@ -380,7 +380,7 @@ function getQueryVariable(variable) {
 
     createOverlayElement();
 
-    setTimeout(function() {
+    setTimeout(function () {
       addLogo();
     }, 500);
   }
@@ -390,7 +390,7 @@ function getQueryVariable(variable) {
 
     var logo = document.getElementsByClassName("swarm-logo");
     logo[logo.length - 1].className += " fadeout";
-    addLogo(settings.top);
+    // addLogo(settings.top);
   }
 
   function padLeftZero(input) {
@@ -405,10 +405,7 @@ function getQueryVariable(variable) {
       "." +
       (parseInt(date.getMonth(), 10) + 1) +
       "." +
-      date
-        .getFullYear()
-        .toString()
-        .substring(2);
+      date.getFullYear().toString().substring(2);
     document.getElementsByClassName("swarm-date")[0].innerHTML = dateString;
 
     var timeString =
