@@ -212,7 +212,7 @@ function getQueryVariable(variable) {
   function init() {
     started = true;
     if (settings.showOverlay) {
-      // addOverlay();
+      addOverlay();
     }
 
     var supportsWebGL = (function () {
@@ -416,11 +416,11 @@ function getQueryVariable(variable) {
   }
 
   function createOverlayElement() {
-    var overlay = document.createElement("div");
-    overlay.style.width = canvasSize.width + "px";
-    overlay.style.height = canvasSize.height + "px";
-    overlay.className = "swarm-overlay";
-    settings.container.appendChild(overlay);
+    // var overlay = document.createElement("div");
+    // overlay.style.width = canvasSize.width + "px";
+    // overlay.style.height = canvasSize.height + "px";
+    // overlay.className = "swarm-overlay";
+    // settings.container.appendChild(overlay);
   }
 
   function addLogo(emotions) {
